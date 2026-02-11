@@ -1,0 +1,2555 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Portfolio Admin | Command Center</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link rel="stylesheet"
+
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<link rel="stylesheet"
+
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+
+<style>
+
+@import
+
+    url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap')
+
+    ;
+
+
+
+body {
+
+    font-family: 'Plus Jakarta Sans',+ sans-serif;
+
+}
+
+
+
+.tab-content {
+
+    display: none;
+
+}
+
+
+
+.tab-content.active {
+
+    display: block;
+
+}
+
+
+
+.glass {
+
+    background: rgba(255, 255, 255, 0.8);
+
+    backdrop-filter: blur(12px);
+
+}
+
+
+
+.sidebar-dark {
+
+    background: #0f172a;
+
+}
+
+</style>
+
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+
+
+
+    <div id="loginOverlay"
+
+        class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900 animate__animated animate__fadeIn">
+
+        <div
+
+            class="bg-white p-10 rounded-[2.5rem] shadow-2xl w-full max-w-md text-center mx-4">
+
+            <div
+
+                class="w-20 h-20 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+
+                <i class="fas fa-fingerprint text-4xl"></i>
+
+            </div>
+
+            <h2 class="text-3xl font-bold mb-2">Welcome Back</h2>
+
+            <p class="text-slate-500 mb-8">Secure Admin Access</p>
+
+            <input type="password" id="adminPass"
+
+                class="w-full bg-slate-100 border-none p-4 rounded-2xl mb-4 text-center text-xl outline-none focus:ring-2 focus:ring-blue-500 transition"
+
+                placeholder="••••••••">
+
+            <button onclick="handleLogin()"
+
+                class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg hover:bg-blue-700 transition transform hover:scale-[1.02]">Unlock
+
+                Dashboard</button>
+
+            <p id="loginError"
+
+                class="text-red-500 mt-4 hidden animate__animated animate__shakeX">Invalid
+
+                Password</p>
+
+                
+
+                
+
+        <a class="fas fa-sign-out-alt" href="home.html">Home Page</a>
+
+        </div>
+
+    </div>
+
+
+
+    <aside
+
+        class="hidden lg:flex flex-col w-72 sidebar-dark text-white h-screen fixed left-0 top-0 shadow-2xl">
+
+        <div
+
+            class="p-8 text-2xl font-black tracking-tighter border-b border-slate-800">
+
+            PORTFOLIO <span class="text-blue-500">OS</span>
+
+        </div>
+
+        <nav class="flex-1 p-6 space-y-3 mt-4">
+
+            <button onclick="switchTab('home')"
+
+                class="w-full flex items-center p-4 rounded-2xl hover:bg-slate-800 transition group">
+
+                <i
+
+                    class="fas fa-chart-pie mr-4 text-slate-400 group-hover:text-blue-400"></i>
+
+                Dashboard
+
+            </button>
+
+            <button onclick="switchTab('work')"
+
+                class="w-full flex items-center p-4 rounded-2xl hover:bg-slate-800 transition group">
+
+                <i
+
+                    class="fas fa-briefcase mr-4 text-slate-400 group-hover:text-blue-400"></i>
+
+                Work History
+
+            </button>
+
+            <button onclick="switchTab('projects')"
+
+                class="w-full flex items-center p-4 rounded-2xl hover:bg-slate-800 transition group">
+
+                <i
+
+                    class="fas fa-rocket mr-4 text-slate-400 group-hover:text-blue-400"></i>
+
+                Projects
+
+            </button>
+
+            <button onclick="switchTab('skills')"
+
+                class="w-full flex items-center p-4 rounded-2xl hover:bg-slate-800 transition group">
+
+                <i class="fas fa-bolt mr-4 text-slate-400 group-hover:text-blue-400"></i>
+
+                Skills
+
+            </button>
+
+            <button onclick="switchTab('inbox')"
+
+                class="w-full flex items-center p-4 rounded-2xl hover:bg-slate-800 transition group">
+
+                <i
+
+                    class="fas fa-envelope-open-text mr-4 text-slate-400 group-hover:text-blue-400"></i>
+
+                Inbox
+
+            </button>
+
+        </nav>
+
+        <div class="p-8 border-t border-slate-800">
+
+            <button onclick="logout()"
+
+                class="text-slate-400 hover:text-red-400 flex items-center">
+
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <main class="lg:ml-72 min-h-screen pb-32 lg:pb-10">
+
+        <header
+
+            class="p-6 md:p-10 flex justify-between items-center sticky top-0 bg-slate-50/80 backdrop-blur-md z-40">
+
+            <div>
+
+                <h1 id="tabTitle" class="text-3xl font-black text-slate-900">Dashboard</h1>
+
+                <p class="text-slate-500 text-sm">
+
+                    System status: <span class="text-green-500 font-bold underline">Operational</span>
+
+                </p>
+
+            </div>
+
+        </header>
+
+
+
+        <div class="px-6 md:px-10 max-w-6xl mx-auto">
+
+
+
+            <section id="home"
+
+                class="tab-content active animate__animated animate__fadeIn">
+
+
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+                    <div
+
+                        class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm">
+
+                        <div class="flex items-center justify-between mb-6">
+
+                            <h3 class="font-black text-slate-800 tracking-tight">Monthly
+
+                                Inquiries</h3>
+
+                            <i class="fas fa-chart-line text-blue-500"></i>
+
+                        </div>
+
+                        <div class="relative h-[300px]">
+
+                            <canvas id="statsChart"></canvas>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div
+
+                        class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm">
+
+                        <div class="flex items-center justify-between mb-6">
+
+                            <h3 class="font-black text-slate-800 tracking-tight">Skills
+
+                                Distribution</h3>
+
+                            <i class="fas fa-chart-pie text-purple-500"></i>
+
+                        </div>
+
+                        <div class="relative h-[300px]">
+
+                            <canvas id="skillsDoughnut"></canvas>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+
+                    <div
+
+                        class="xl:col-span-2 bg-blue-600 p-8 md:p-10 rounded-[2.5rem] shadow-blue-200 shadow-2xl text-white">
+
+                        <div
+
+                            class="flex justify-between items-center mb-8 border-b border-white/10 pb-4">
+
+                            <div class="flex items-center gap-4">
+
+                                <h3
+
+                                    class="text-2xl font-black italic uppercase tracking-tighter">Command
+
+                                    Center</h3>
+
+                                <div
+
+                                    class="flex items-center bg-white/10 rounded-full px-3 py-1 border border-white/20">
+
+                                    <input type="number" id="search_id" placeholder="ID..."
+
+                                        oninput="liveSearch(this.value)"
+
+                                        class="bg-transparent text-white text-xs outline-none w-16 placeholder:text-white/40 px-2">
+
+                                    <i id="search_icon"
+
+                                        class="fas fa-bolt text-[10px] text-blue-300"></i>
+
+                                </div>
+
+                            </div>
+
+                            <span id="profileStatus"
+
+                                class="text-[10px] uppercase tracking-widest bg-white/20 px-3 py-1 rounded-full font-bold">New
+
+                                Entry Mode</span>
+
+                        </div>
+
+
+
+                        <form onsubmit="handleHomeSubmit(event)" class="space-y-6">
+
+                            <input type="hidden" id="h_id">
+
+
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                                <div class="space-y-2">
+
+                                    <label class="text-[10px] font-bold uppercase opacity-70 ml-1">Full
+
+                                        Name</label> <input type="text" id="h_name" placeholder="John Doe"
+
+                                        class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition">
+
+                                </div>
+
+                                <div class="space-y-2">
+
+                                    <label class="text-[10px] font-bold uppercase opacity-70 ml-1">Current
+
+                                        Role</label> <input type="text" id="h_role"
+
+                                        placeholder="Java Developer"
+
+                                        class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition">
+
+                                </div>
+
+                                <div class="space-y-2">
+
+                                    <label class="text-[10px] font-bold uppercase opacity-70 ml-1">Experience</label>
+
+                                    <input type="text" id="h_exp" placeholder="5+ Years"
+
+                                        class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 transition">
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="space-y-2">
+
+                                <label class="text-[10px] font-bold uppercase opacity-70 ml-1">Professional
+
+                                    Bio</label>
+
+                                <textarea id="h_bio" placeholder="Tell the world who you are..."
+
+                                    class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-white/50 h-28 transition"></textarea>
+
+                            </div>
+
+
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                                <div class="space-y-2">
+
+                                    <label class="text-[10px] font-bold uppercase opacity-70 ml-1"><i
+
+                                        class="fab fa-github mr-1"></i> GitHub</label> <input type="text"
+
+                                        id="h_github"
+
+                                        class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none">
+
+                                </div>
+
+                                <div class="space-y-2">
+
+                                    <label class="text-[10px] font-bold uppercase opacity-70 ml-1"><i
+
+                                        class="fab fa-linkedin mr-1"></i> LinkedIn</label> <input type="text"
+
+                                        id="h_linkedin"
+
+                                        class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none">
+
+                                </div>
+
+                                <div class="space-y-2">
+
+                                    <label class="text-[10px] font-bold uppercase opacity-70 ml-1"><i
+
+                                        class="fab fa-twitter mr-1"></i> Twitter</label> <input type="text"
+
+                                        id="h_twitter"
+
+                                        class="w-full bg-white/10 border border-white/20 p-4 rounded-2xl outline-none">
+
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                                <div class="space-y-2">
+
+                                    <label class="text-[10px] font-bold uppercase opacity-70 ml-1">Profile
+
+                                        Photo</label> <input type="file" id="h_photo"
+
+                                        onchange="previewFile(this, 'preview_img')"
+
+                                        class="block w-full text-xs text-white/50 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-white file:text-blue-600">
+
+                                </div>
+
+                                <div class="space-y-2">
+
+                                    <label class="text-[10px] font-bold uppercase opacity-70 ml-1">Resume
+
+                                        (PDF)</label> <input type="file" id="h_cv"
+
+                                        class="block w-full text-xs text-white/50 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-white file:text-blue-600">
+
+                                </div>
+
+                            </div>
+
+
+
+                            <button type="submit" id="homeSubmitBtn"
+
+                                class="w-full bg-white text-blue-600 py-5 rounded-[2rem] font-black shadow-xl hover:bg-slate-100 transition transform hover:scale-[1.01] active:scale-95">
+
+                                SYNC PORTFOLIO</button>
+
+                        </form>
+
+                    </div>
+
+
+
+                    <div class="space-y-6">
+
+                        <div
+
+                            class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200 flex flex-col items-center justify-center text-center">
+
+                            <div class="relative mb-6">
+
+                                <div
+
+                                    class="w-40 h-40 rounded-full border-8 border-blue-50 overflow-hidden shadow-2xl bg-slate-100">
+
+                                    <img id="preview_img" src="https://via.placeholder.com/150"
+
+                                        class="w-full h-full object-cover">
+
+                                </div>
+
+                                <div
+
+                                    class="absolute bottom-2 right-2 bg-green-500 w-8 h-8 rounded-full border-4 border-white"></div>
+
+                            </div>
+
+                            <h4 id="preview_name"
+
+                                class="text-3xl font-black text-slate-800 tracking-tight">Your
+
+                                Name</h4>
+
+                            <h5 id="preview_role" class="text-blue-600 font-bold text-lg">Your
+
+                                Role</h5>
+
+                            <p id="preview_exp" class="text-slate-400 font-medium">Experience
+
+                                Level</p>
+
+                            <div id="preview_bio"
+
+                                class="mt-4 text-slate-500 text-sm italic max-w-xs leading-relaxed">Bio
+
+                                preview...</div>
+
+
+
+                            <div class="mt-8 flex items-center space-x-4">
+
+                                <i class="fab fa-github text-slate-300 text-xl"></i> <i
+
+                                    class="fab fa-linkedin text-slate-300 text-xl"></i> <a
+
+                                    id="preview_cv_btn" href="#" target="_blank"
+
+                                    class="hidden bg-slate-100 text-slate-600 px-4 py-1.5 rounded-full text-[10px] font-black hover:bg-blue-600 hover:text-white transition">
+
+                                    <i class="fas fa-file-pdf mr-1"></i> VIEW CV
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <div
+
+                            class="bg-white p-6 rounded-[2rem] border border-red-100 shadow-sm">
+
+                            <div class="flex items-center gap-4 mb-4">
+
+                                <div class="bg-red-100 text-red-600 p-3 rounded-2xl">
+
+                                    <i class="fas fa-exclamation-triangle"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h4 class="font-bold text-slate-800 text-sm">Danger Zone</h4>
+
+                                    <p
+
+                                        class="text-[10px] text-slate-400 font-medium uppercase tracking-wider">Irreversible
+
+                                        Actions</p>
+
+                                </div>
+
+                            </div>
+
+                            <button onclick="deleteHomeProfile()"
+
+                                class="w-full bg-white text-red-600 border border-red-200 py-3 rounded-2xl text-xs font-black hover:bg-red-600 hover:text-white transition shadow-sm">
+
+                                PURGE PROFILE DATA</button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <section id="work"
+
+                class="tab-content animate__animated animate__fadeIn">
+
+                <div class="grid grid-cols-1 xl:grid-cols-12 gap-12">
+
+
+
+                    <div class="xl:col-span-4">
+
+                        <div
+
+                            class="sticky top-8 bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
+
+                            <div class="flex items-center gap-4 mb-8">
+
+                                <div
+
+                                    class="bg-blue-600 text-white p-3 rounded-2xl shadow-lg shadow-blue-200">
+
+                                    <i class="fas fa-briefcase"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h3 class="text-xl font-black text-slate-800 tracking-tight">Career
+
+                                        Forge</h3>
+
+                                    <p
+
+                                        class="text-[10px] text-slate-400 uppercase font-bold tracking-widest">Add
+
+                                        or Edit History</p>
+
+                                </div>
+
+                            </div>
+
+
+
+                            <form onsubmit="handleWorkSubmit(event)" class="space-y-5">
+
+                                <input type="hidden" id="w_id">
+
+
+
+                                <div class="space-y-1">
+
+                                    <label
+
+                                        class="text-[10px] font-bold text-slate-500 uppercase ml-2">Company
+
+                                        / Institution</label> <input type="text" id="w_nameOfWork"
+
+                                        placeholder="e.g. Google or Freelance"
+
+                                        class="w-full bg-slate-50 border border-slate-100 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+
+                                </div>
+
+
+
+                                <div class="space-y-1">
+
+                                    <label
+
+                                        class="text-[10px] font-bold text-slate-500 uppercase ml-2">Duration
+
+                                        (Time)</label> <input type="text" id="w_time"
+
+                                        placeholder="Jan 2021 - Mar 2023"
+
+                                        class="w-full bg-slate-50 border border-slate-100 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+
+                                </div>
+
+
+
+                                <div class="space-y-1">
+
+                                    <label
+
+                                        class="text-[10px] font-bold text-slate-500 uppercase ml-2">Experience
+
+                                        Details</label>
+
+                                    <textarea id="w_description"
+
+                                        placeholder="What did you achieve? Use bullet points..."
+
+                                        class="w-full bg-slate-50 border border-slate-100 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 h-32 transition-all"></textarea>
+
+                                </div>
+
+
+
+                                <div class="space-y-1">
+
+                                    <label
+
+                                        class="text-[10px] font-bold text-slate-500 uppercase ml-2">Work
+
+                                        Photo / Logo</label>
+
+                                    <div class="relative group">
+
+                                        <input type="file" id="w_photo"
+
+                                            class="block w-full text-xs text-slate-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:bg-slate-800 file:text-white hover:file:bg-slate-700 transition">
+
+                                    </div>
+
+                                </div>
+
+
+
+                                <div class="pt-4 flex flex-col gap-3">
+
+                                    <button type="submit" id="workSubmitBtn"
+
+                                        class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-xl shadow-blue-100 hover:bg-blue-700 transition transform hover:scale-[1.02] active:scale-95">
+
+                                        SYNC TO TIMELINE</button>
+
+                                    <button type="button" onclick="resetWorkForm()"
+
+                                        class="text-slate-400 text-[10px] font-bold uppercase tracking-widest hover:text-red-500 transition">Discard
+
+                                        Changes</button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="xl:col-span-8">
+
+                        <div class="flex items-center justify-between mb-8 px-4">
+
+                            <h3 class="text-2xl font-black text-slate-800">Professional
+
+                                Journey</h3>
+
+                            <span id="workCount"
+
+                                class="bg-blue-50 text-blue-600 px-4 py-1 rounded-full text-xs font-bold">0
+
+                                Entries</span>
+
+                        </div>
+
+
+
+                        <div id="workList"
+
+                            class="relative space-y-8 before:absolute before:inset-0 before:ml-10 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-blue-500 before:via-slate-200 before:to-transparent">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <section id="projects"
+
+                class="tab-content animate__animated animate__fadeIn">
+
+                <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+
+
+
+                    <div class="xl:col-span-1">
+
+                        <div
+
+                            class="sticky top-8 bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+
+                            <h3
+
+                                class="text-xl font-black text-slate-800 mb-6 flex items-center gap-2">
+
+                                <i class="fas fa-rocket text-blue-600"></i> New Project
+
+                            </h3>
+
+                            <form onsubmit="handleProjectSubmit(event)" class="space-y-4">
+
+                                <input type="hidden" id="p_id"> <input type="text"
+
+                                    id="p_name" placeholder="Project Name"
+
+                                    class="w-full bg-slate-50 p-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500/20 transition">
+
+
+
+                                <input type="text" id="p_link" placeholder="Live Demo/Repo URL"
+
+                                    class="w-full bg-slate-50 p-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500/20 transition">
+
+
+
+                                <textarea id="p_description" placeholder="Short description..."
+
+                                    class="w-full bg-slate-50 p-4 rounded-2xl border-none outline-none focus:ring-2 focus:ring-blue-500/20 h-24 transition"></textarea>
+
+
+
+                                <div class="space-y-1">
+
+                                    <label
+
+                                        class="text-[10px] font-bold text-slate-400 ml-2 uppercase">Screenshot</label>
+
+                                    <input type="file" id="p_photo"
+
+                                        class="text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-blue-50 file:text-blue-700">
+
+                                </div>
+
+
+
+                                <button type="submit" id="projectSubmitBtn"
+
+                                    class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg shadow-blue-100 hover:scale-[1.02] transition active:scale-95">
+
+                                    LAUNCH PROJECT</button>
+
+                                <button type="button" onclick="resetProjectForm()"
+
+                                    class="w-full text-slate-400 text-[10px] font-bold uppercase tracking-widest mt-2">Clear
+
+                                    Form</button>
+
+                            </form>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="xl:col-span-3">
+
+                        <div id="projectGrid"
+
+                            class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <section id="skills"
+
+                class="tab-content animate__animated animate__fadeIn">
+
+                <div
+
+                    class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 mb-8 flex flex-wrap md:flex-nowrap gap-4">
+
+                    <input type="hidden" id="s_id"> <input type="text"
+
+                        id="s_name" placeholder="Skill Name (e.g. Java)"
+
+                        class="flex-1 bg-slate-50 p-4 rounded-2xl outline-none border-none focus:ring-2 focus:ring-blue-500/20">
+
+
+
+                    <select id="s_category"
+
+                        class="w-full md:w-48 bg-slate-50 p-4 rounded-2xl outline-none border-none text-slate-500 font-bold">
+
+                        <option value="Frontend">Frontend</option>
+
+                        <option value="Backend">Backend</option>
+
+                        <option value="Tools">Tools/DevOps</option>
+
+                        <option value="Database">Database</option>
+
+                        <option value="Other">Other</option>
+
+                    </select>
+
+
+
+                    <button onclick="handleSkillSubmit()" id="skillSubmitBtn"
+
+                        class="w-full md:w-auto bg-blue-600 text-white px-10 rounded-2xl font-black hover:shadow-lg hover:shadow-blue-200 transition active:scale-95">
+
+                        ADD SKILL</button>
+
+                </div>
+
+
+
+                <div id="skillsGrid"
+
+                    class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"></div>
+
+            </section>
+
+
+
+            <section id="inbox"
+
+                class="tab-content animate__animated animate__fadeIn">
+
+                <div class="flex items-center justify-between mb-8">
+
+                    <div>
+
+                        <h2 class="text-3xl font-black text-slate-800 tracking-tight">Messages</h2>
+
+                        <p class="text-slate-400 text-sm font-medium">Inquiries from
+
+                            your portfolio visitors</p>
+
+                    </div>
+
+                    <div id="inboxCount"
+
+                        class="bg-blue-600 text-white px-4 py-2 rounded-2xl font-black text-xs shadow-lg shadow-blue-100">
+
+                        0 Messages</div>
+
+                </div>
+
+
+
+                <div id="inboxList" class="grid grid-cols-1 gap-4">
+
+                    <div
+
+                        class="flex flex-col items-center justify-center py-20 opacity-20">
+
+                        <i class="fas fa-inbox text-6xl mb-4"></i>
+
+                        <p class="font-bold uppercase tracking-widest">Scanning for
+
+                            messages...</p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+        </div>
+
+    </main>
+
+
+
+    <nav
+
+        class="lg:hidden fixed bottom-6 left-6 right-6 glass p-2 flex justify-around rounded-[2rem] shadow-2xl border border-white/50 z-50">
+
+        <button onclick="switchTab('home')"
+
+            class="p-4 text-slate-400 hover:text-blue-600 transition">
+
+            <i class="fas fa-chart-pie"></i>
+
+        </button>
+
+        <button onclick="switchTab('work')"
+
+            class="p-4 text-slate-400 hover:text-blue-600 transition">
+
+            <i class="fas fa-briefcase"></i>
+
+        </button>
+
+        
+
+        <button onclick="switchTab('skills')"
+
+    class="p-4 text-slate-400 hover:text-blue-600 transition">
+
+    <i class="fas fa-tools"></i>
+
+</button>
+
+
+
+
+
+        <button onclick="switchTab('projects')"
+
+            class="p-4 text-slate-400 hover:text-blue-600 transition">
+
+            <i class="fas fa-rocket"></i>
+
+        </button>
+
+        <button onclick="switchTab('inbox')"
+
+            class="p-4 text-slate-400 hover:text-blue-600 transition relative">
+
+            <i class="fas fa-envelope"></i> <span
+
+                class="absolute top-3 right-3 w-2 h-2 bg-red-500 rounded-full"></span>
+
+        </button>
+
+        
+
+        <button onclick="logout()" 
+
+    class="p-4 text-slate-400 hover:text-red-600 transition">
+
+    <i class="fas fa-sign-out-alt"></i>
+
+</button>
+
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+
+        // --- AUTH ---
+
+        function handleLogin() {
+
+            const pass = document.getElementById('adminPass').value;
+
+            if(pass === 'admin123') {
+
+                localStorage.setItem('admin_auth', 'true');
+
+                document.getElementById('loginOverlay').classList.add('animate__fadeOut');
+
+                setTimeout(() => {
+
+                    document.getElementById('loginOverlay').style.display = 'none';
+
+                    initDashboard();
+
+                }, 500);
+
+            } else {
+
+                const err = document.getElementById('loginError');
+
+                err.classList.remove('hidden');
+
+            }
+
+        }
+
+
+
+        function logout() {
+
+            localStorage.removeItem('admin_auth');
+
+            location.reload();
+
+        }
+
+
+
+        // --- NAVIGATION ---
+
+        function switchTab(tabId) {
+
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+    document.getElementById(tabId).classList.add('active');
+
+    document.getElementById('tabTitle').innerText = tabId.charAt(0).toUpperCase() + tabId.slice(1);
+
+    
+
+    // Trigger specific loaders
+
+    if(tabId === 'home') loadHomeData();
+
+    if(tabId === 'work') loadWorkData();
+
+    if(tabId === 'projects') typeof loadProjects === 'function' && loadProjects();
+
+    if(tabId === 'skills') typeof loadSkills === 'function' && loadSkills();
+
+    if(tabId === 'inbox') typeof loadInbox === 'function' && loadInbox();
+
+}
+
+
+
+        // --- API INTEGRATIONS ---
+
+       // 1. GET: Load existing profile data on start
+
+async function loadHomeData() {
+
+    try {
+
+        const res = await fetch('/api/home-profile');
+
+        if (res.ok) {
+
+            const data = await res.json();
+
+            // If data is an array (findAll), take the first one. If single object, use it.
+
+            const profile = Array.isArray(data) ? data[0] : data;
+
+            
+
+            if (profile) {
+
+                document.getElementById('h_id').value = profile.id;
+
+                document.getElementById('h_role').value = profile.role;
+
+                document.getElementById('h_exp').value = profile.experience;
+
+                document.getElementById('profileStatus').innerText = "Existing Profile (ID: " + profile.id + ")";
+
+                document.getElementById('homeSubmitBtn').innerText = "Update Existing Profile";
+
+            }
+
+        }
+
+    } catch (err) {
+
+        console.log("No existing profile found yet.");
+
+    }
+
+}
+
+
+
+// 2. POST/PUT: Combined Logic
+
+let searchTimeout;
+
+
+
+// 1. Live Search ID Logic
+
+async function liveSearch(id) {
+
+    clearTimeout(searchTimeout);
+
+    const status = document.getElementById('profileStatus');
+
+    
+
+    if (!id || id === "") {
+
+        resetHomeForm();
+
+        status.innerText = "New Entry Mode";
+
+        return;
+
+    }
+
+
+
+    searchTimeout = setTimeout(async () => {
+
+        try {
+
+            const res = await fetch(`/api/home-profile/${id}`);
+
+            if (res.ok) {
+
+                const profile = await res.json();
+
+                fillHomeForm(profile);
+
+                status.innerText = `Editing ID: ${id}`;
+
+                document.getElementById('homeSubmitBtn').innerText = "UPDATE PORTFOLIO";
+
+            } else {
+
+                status.innerText = "ID Not Found";
+
+            }
+
+        } catch (err) {
+
+            console.error("Search Error:", err);
+
+        }
+
+    }, 500);
+
+}
+
+
+
+// 2. Handle Submit (POST or PUT)
+
+async function handleHomeSubmit(e) {
+
+    e.preventDefault();
+
+    const id = document.getElementById('h_id').value;
+
+    const fd = new FormData();
+
+
+
+    fd.append('fullName', document.getElementById('h_name').value);
+
+    fd.append('role', document.getElementById('h_role').value);
+
+    fd.append('experience', document.getElementById('h_exp').value);
+
+    fd.append('bio', document.getElementById('h_bio').value);
+
+    fd.append('githubUrl', document.getElementById('h_github').value);
+
+    fd.append('linkedinUrl', document.getElementById('h_linkedin').value);
+
+    fd.append('twitterUrl', document.getElementById('h_twitter').value);
+
+
+
+    const photo = document.getElementById('h_photo').files[0];
+
+    const cv = document.getElementById('h_cv').files[0];
+
+    if (photo) fd.append('photo', photo);
+
+    if (cv) fd.append('cv', cv);
+
+
+
+    const url = id ? `/api/home-profile/${id}` : '/api/home-profile';
+
+    const method = id ? 'PUT' : 'POST';
+
+
+
+    try {
+
+        const res = await fetch(url, { method: method, body: fd });
+
+        if (res.ok) {
+
+            alert(id ? "Updated!" : "Created!");
+
+            loadHomeData(); // Reload initial view
+
+        }
+
+    } catch (err) {
+
+        alert("Action failed. Check console.");
+
+    }
+
+}
+
+
+
+// 3. DELETE: (Optional) If you want a reset button
+
+// Add to your loadHomeData function:
+
+async function fetchProfileById() {
+
+    const id = document.getElementById('search_id').value;
+
+    if (!id) {
+
+        alert("Please enter a valid ID");
+
+        return;
+
+    }
+
+
+
+    try {
+
+        // We call our API for a single ID
+
+        // Note: Make sure your Java Controller has a @GetMapping("/{id}")
+
+        const res = await fetch(`/api/home-profile/${id}`);
+
+        
+
+        if (res.ok) {
+
+            const profile = await res.json();
+
+            fillHomeForm(profile); // Populate the form with this data
+
+            alert(`Loaded Profile ID: ${id}`);
+
+        } else {
+
+            alert("Profile not found with that ID.");
+
+        }
+
+    } catch (err) {
+
+        console.error("Search failed", err);
+
+    }
+
+}
+
+
+
+// Helper function to fill form fields (cleaner code)
+
+function fillHomeForm(profile) {
+
+    document.getElementById('h_id').value = profile.id;
+
+    document.getElementById('h_name').value = profile.fullName || '';
+
+    document.getElementById('h_role').value = profile.role || '';
+
+    document.getElementById('h_exp').value = profile.experience || '';
+
+    document.getElementById('h_bio').value = profile.bio || '';
+
+    document.getElementById('h_github').value = profile.githubUrl || '';
+
+    document.getElementById('h_linkedin').value = profile.linkedinUrl || '';
+
+    document.getElementById('h_twitter').value = profile.twitterUrl || '';
+
+
+
+    // Update Preview
+
+    document.getElementById('preview_name').innerText = profile.fullName || 'Your Name';
+
+    document.getElementById('preview_role').innerText = profile.role || 'Your Role';
+
+    document.getElementById('preview_exp').innerText = profile.experience || 'Experience Level';
+
+    document.getElementById('preview_bio').innerText = profile.bio || '';
+
+    
+
+    if (profile.photoPath) {
+
+        document.getElementById('preview_img').src = `http://localhost:8080/${profile.photoPath}`;
+
+    }
+
+    
+
+    if (profile.cvPath) {
+
+        const cvBtn = document.getElementById('preview_cv_btn');
+
+        cvBtn.href = `http://localhost:8080/${profile.cvPath}`;
+
+        cvBtn.classList.remove('hidden');
+
+    }
+
+}
+
+
+
+// The Delete function
+
+async function deleteHomeProfile() {
+
+    const id = document.getElementById('h_id').value;
+
+    if (!id) return alert("No profile to delete!");
+
+
+
+    if (confirm("⚠️ DANGER: This will permanently delete your homepage data. Proceed?")) {
+
+        const res = await fetch(`/api/home-profile/${id}`, { method: 'DELETE' });
+
+        if (res.ok) {
+
+            alert("Profile Purged.");
+
+            location.reload();
+
+        }
+
+    }
+
+}
+
+
+
+// Update your initDashboard to include loadHomeData
+
+function initDashboard() {
+
+    initChart();
+
+    loadHomeData(); // Fetches GET data
+
+    switchTab('home');
+
+}
+
+        async function loadWork() {
+
+            const res = await fetch('/api/work');
+
+            const data = await res.json();
+
+            document.getElementById('workList').innerHTML = data.map(w => `
+
+                <div class="ml-8 bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 relative animate__animated animate__fadeInLeft">
+
+                    <div class="absolute -left-[44px] top-8 w-5 h-5 bg-blue-600 rounded-full border-4 border-slate-50"></div>
+
+                    <div class="flex items-center gap-4 mb-3">
+
+                        <img src="${w.photoPath}" class="w-12 h-12 rounded-xl object-cover">
+
+                        <div>
+
+                            <h4 class="font-bold text-slate-800">${w.nameOfWork}</h4>
+
+                            <p class="text-blue-600 text-xs font-bold">${w.time}</p>
+
+                        </div>
+
+                    </div>
+
+                    <p class="text-slate-500 text-sm">${w.description}</p>
+
+                    <button onclick="deleteItem('work', ${w.id})" class="mt-4 text-red-400 text-xs font-bold">DELETE ENTRY</button>
+
+                </div>
+
+            `).join('');
+
+        }
+
+
+
+        async function loadInbox() {
+
+            const res = await fetch('/api/contact');
+
+            const data = await res.json();
+
+            document.getElementById('inboxList').innerHTML = data.map(m => `
+
+                <div class="bg-white p-6 rounded-[2rem] shadow-sm border-l-8 border-blue-600 animate__animated animate__fadeInUp">
+
+                    <div class="flex justify-between items-center mb-2">
+
+                        <h4 class="font-black text-slate-800">${m.subject}</h4>
+
+                        <span class="text-[10px] font-bold text-slate-400">${new Date(m.createdAt).toLocaleDateString()}</span>
+
+                    </div>
+
+                    <p class="text-slate-600 text-sm mb-4">${m.description}</p>
+
+                    <div class="flex justify-between items-center">
+
+                        <span class="text-xs font-bold text-blue-600">${m.name} &lt;${m.email}&gt;</span>
+
+                        <button onclick="deleteItem('contact', ${m.id})" class="text-slate-300 hover:text-red-500 transition"><i class="fas fa-trash-alt"></i></button>
+
+                    </div>
+
+                </div>
+
+            `).join('');
+
+        }
+
+
+
+        async function loadSkills() {
+
+            const res = await fetch('/api/skills');
+
+            const data = await res.json();
+
+            document.getElementById('skillsGrid').innerHTML = data.map(s => `
+
+                <div class="bg-white p-4 rounded-2xl shadow-sm text-center border border-slate-100 group relative overflow-hidden">
+
+                    <p class="font-bold text-slate-700">${s.name}</p>
+
+                    <button onclick="deleteItem('skills', ${s.id})" class="absolute inset-0 bg-red-500 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition">Delete</button>
+
+                </div>
+
+            `).join('');
+
+        }
+
+
+
+        async function deleteItem(type, id) {
+
+            if(confirm("Permanent Delete?")) {
+
+                await fetch(`/api/${type}/${id}`, { method: 'DELETE' });
+
+                switchTab(type === 'contact' ? 'inbox' : type);
+
+            }
+
+        }
+
+
+
+        // --- CHART CONFIG ---
+
+        async function initCharts() {
+
+    // --- 1. Line Chart (Inquiries) ---
+
+            // --- 1. Line Chart (Real Monthly Inquiries) ---
+
+            const msgRes = await fetch('/api/contact');
+
+            const messages = await msgRes.json();
+
+
+
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+            const last6Months = [];
+
+            const messageCounts = [];
+
+
+
+            for (let i = 5; i >= 0; i--) {
+
+                const d = new Date();
+
+                d.setMonth(d.getMonth() - i);
+
+                last6Months.push(monthNames[d.getMonth()]);
+
+                
+
+                const count = messages.filter(m => {
+
+                    const msgDate = new Date(m.createdAt);
+
+                    return msgDate.getMonth() === d.getMonth();
+
+                }).length;
+
+                messageCounts.push(count);
+
+            }
+
+
+
+            const ctxLine = document.getElementById('statsChart').getContext('2d');
+
+            new Chart(ctxLine, {
+
+                type: 'line',
+
+                data: {
+
+                    labels: last6Months,
+
+                    datasets: [{
+
+                        label: 'Inquiries',
+
+                        data: messageCounts,
+
+                        borderColor: '#3b82f6',
+
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+
+                        fill: true,
+
+                        tension: 0.4,
+
+                        pointRadius: 4
+
+                    }]
+
+                },
+
+                options: { 
+
+                    responsive: true, 
+
+                    maintainAspectRatio: false,
+
+                    plugins: { legend: { display: false } } 
+
+                }
+
+        
+
+    });
+
+
+
+    // --- 2. Doughnut Chart (Skills Distribution) ---
+
+    const res = await fetch('/api/skills');
+
+    const skills = await res.json();
+
+    
+
+    // Calculate categories (e.g., { "Backend": 5, "Frontend": 3 })
+
+    const categories = {};
+
+    skills.forEach(s => {
+
+        categories[s.category] = (categories[s.category] || 0) + 1;
+
+    });
+
+
+
+    const ctxDoughnut = document.getElementById('skillsDoughnut').getContext('2d');
+
+    new Chart(ctxDoughnut, {
+
+        type: 'doughnut',
+
+        data: {
+
+            labels: Object.keys(categories),
+
+            datasets: [{
+
+                data: Object.values(categories),
+
+                backgroundColor: ['#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#f59e0b'],
+
+                borderWidth: 0,
+
+                hoverOffset: 10
+
+            }]
+
+        },
+
+        options: {
+
+            responsive: true,
+
+            cutout: '70%',
+
+            plugins: {
+
+                legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } }
+
+            }
+
+        }
+
+    });
+
+}
+
+        
+
+     // 1. Fetch and Display (GET)
+
+       async function loadWorkData() {
+
+    try {
+
+        const res = await fetch('http://localhost:8080/api/work');
+
+        if (!res.ok) return;
+
+
+
+        const data = await res.json();
+
+        const container = document.getElementById('workList');
+
+        
+
+        if (data.length === 0) {
+
+            container.innerHTML = `<p class="text-slate-400 italic text-center py-10">Your journey is just beginning. Add your first milestone!</p>`;
+
+            return;
+
+        }
+
+
+
+        container.innerHTML = ""; 
+
+        data.forEach((job, index) => {
+
+            container.innerHTML += `
+
+                <div class="relative pl-12 md:pl-20 animate__animated animate__fadeInUp" style="animation-delay: ${index * 0.1}s">
+
+                    <div class="absolute left-[18px] md:left-[38px] top-8 w-4 h-4 rounded-full border-4 border-white bg-blue-600 shadow-lg z-10"></div>
+
+                    
+
+                    <div class="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all group relative overflow-hidden">
+
+                        
+
+                        <div class="absolute top-6 right-6 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+
+                            <button onclick="editWork(${job.id})" 
+
+                                    class="p-2 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition shadow-sm"
+
+                                    title="Edit Experience">
+
+                                <i class="fas fa-edit text-xs"></i>
+
+                            </button>
+
+                            <button onclick="deleteWork(${job.id})" 
+
+                                    class="p-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-600 hover:text-white transition shadow-sm"
+
+                                    title="Delete Experience">
+
+                                <i class="fas fa-trash text-xs"></i>
+
+                            </button>
+
+                        </div>
+
+
+
+                        <div class="flex flex-col md:flex-row gap-6">
+
+                            <div class="w-16 h-16 rounded-2xl bg-slate-50 flex-shrink-0 overflow-hidden border border-slate-100">
+
+                                <img src="http://localhost:8080/${job.photoPath}" 
+
+                                     class="w-full h-full object-cover" 
+
+                                     onerror="this.src='https://via.placeholder.com/100?text=Work'">
+
+                            </div>
+
+                            
+
+                            <div class="flex-grow pr-12">
+
+                                <h4 class="text-lg font-black text-slate-800 tracking-tight">${job.nameOfWork}</h4>
+
+                                <div class="flex items-center gap-2 mt-1">
+
+                                    <span class="text-[10px] bg-blue-50 text-blue-600 font-bold px-2 py-0.5 rounded-md uppercase tracking-wider">
+
+                                        ${job.time}
+
+                                    </span>
+
+                                </div>
+
+                                <p class="text-slate-500 text-sm leading-relaxed mt-4 whitespace-pre-line">
+
+                                    ${job.description}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>`;
+
+        });
+
+    } catch (err) {
+
+        console.error("Failed to load journey:", err);
+
+    }
+
+}
+
+        async function handleWorkSubmit(e) {
+
+            e.preventDefault();
+
+            
+
+            // 1. Get the ID
+
+            const id = document.getElementById('w_id').value;
+
+            const fd = new FormData();
+
+
+
+            // 2. Grab values from HTML
+
+            const nameVal = document.getElementById('w_nameOfWork').value;
+
+            const descVal = document.getElementById('w_description').value;
+
+            const timeVal = document.getElementById('w_time').value;
+
+            const photoFile = document.getElementById('w_photo').files[0];
+
+
+
+            // 3. Append to FormData (Keys MUST match Java @RequestParam)
+
+            fd.append('nameOfWork', nameVal); 
+
+            fd.append('description', descVal);
+
+            fd.append('time', timeVal);
+
+
+
+            // Only append photo if it exists (matches your @PutMapping logic)
+
+            if (photoFile) {
+
+                fd.append('photo', photoFile);
+
+            } else if (!id) {
+
+                // If it's a NEW entry (no ID), the photo is usually required by Spring
+
+                alert("Please select a company logo/photo.");
+
+                return;
+
+            }
+
+
+
+            // Debugging: Look at your console to see what is being sent
+
+            console.log("Sending to API:", Object.fromEntries(fd.entries()));
+
+
+
+            const url = id ? `/api/work/${id}` : '/api/work';
+
+            const method = id ? 'PUT' : 'POST';
+
+
+
+            try {
+
+                const res = await fetch(url, { method: method, body: fd });
+
+                
+
+                if (res.ok) {
+
+                    alert("Success!");
+
+                    resetWorkForm();
+
+                    loadWorkData();
+
+                } else {
+
+                    const errorData = await res.text();
+
+                    console.error("Server Error Response:", errorData);
+
+                    alert("Server rejected request (400). Check keys in Java Controller.");
+
+                }
+
+            } catch (error) {
+
+                console.error("Network Error:", error);
+
+            }
+
+        }
+
+        // 3. Edit Helper
+
+        async function editWork(id) {
+
+    console.log("🛠️ Attempting to edit Work ID:", id); // Check if this is a number or undefined
+
+    
+
+    if (!id) {
+
+        console.error("❌ No ID provided to editWork function!");
+
+        return;
+
+    }
+
+
+
+    try {
+
+        const res = await fetch(`http://localhost:8080/api/work/${id}`);
+
+        if (!res.ok) throw new Error("Work entry not found");
+
+        
+
+        const job = await res.json();
+
+        console.log("📦 Data received from server:", job);
+
+
+
+        // Crucial: Ensure 'w_id' exists in your HTML
+
+        const idField = document.getElementById('w_id');
+
+        if (idField) {
+
+            idField.value = job.id;
+
+            console.log("✅ Hidden input 'w_id' set to:", idField.value);
+
+        } else {
+
+            console.error("❌ Element 'w_id' not found in the HTML!");
+
+        }
+
+
+
+        document.getElementById('w_nameOfWork').value = job.nameOfWork || '';
+
+        document.getElementById('w_time').value = job.time || '';
+
+        document.getElementById('w_description').value = job.description || '';
+
+        document.getElementById('workSubmitBtn').innerText = "UPDATE HISTORY";
+
+        
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    } catch (err) {
+
+        console.error("❌ Error fetching work details:", err);
+
+        alert("Could not load work details.");
+
+    }
+
+}
+
+
+
+        // 4. Delete (DELETE)
+
+        async function deleteWork(id) {
+
+            if (confirm("Delete this chapter from your story?")) {
+
+                const res = await fetch(`http://localhost:8080/api/work/${id}`, { method: 'DELETE' });
+
+                if (res.ok) loadWorkData();
+
+            }
+
+        }
+
+
+
+        function resetWorkForm() {
+
+            document.getElementById('w_id').value = "";
+
+            document.getElementById('workSubmitBtn').innerText = "SYNC TO TIMELINE";
+
+            document.querySelector('#work form').reset();
+
+        }
+
+        
+
+        
+
+     // 1. Fetch and Display Grid
+
+        async function loadProjects() {
+
+    try {
+
+        const res = await fetch('/api/projects');
+
+        const data = await res.json();
+
+        const grid = document.getElementById('projectGrid');
+
+        
+
+        grid.innerHTML = data.map((p, index) => `
+
+            <div class="group bg-white rounded-[2rem] border border-slate-100 overflow-hidden shadow-sm hover:shadow-xl transition-all animate__animated animate__fadeInUp" style="animation-delay: ${index * 0.1}s">
+
+                <div class="relative h-48 overflow-hidden">
+
+                    <img src="http://localhost:8080/${p.photoPath}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+
+                    
+
+                    <div class="absolute top-4 right-4 flex gap-2 translate-y-[-50px] group-hover:translate-y-0 transition-transform">
+
+                        <button onclick="editProject(${p.id})" class="p-2 bg-white/90 text-blue-600 rounded-lg shadow-lg hover:bg-blue-600 hover:text-white transition">
+
+                            <i class="fas fa-edit"></i>
+
+                        </button>
+
+                        
+
+                        <div class="relative flex items-center bg-white/90 rounded-lg p-1 group/del overflow-hidden max-w-[36px] hover:max-w-[150px] transition-all duration-300">
+
+                             <button class="w-7 h-7 flex-shrink-0 bg-red-500 text-white rounded-md"><i class="fas fa-trash-alt text-xs"></i></button>
+
+                             <span class="text-[10px] font-bold text-red-600 px-2 whitespace-nowrap cursor-pointer opacity-0 group-hover/del:opacity-100 transition-opacity" onclick="deleteProject(${p.id})">CONFIRM DELETE?</span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="p-6">
+
+                    <h4 class="font-black text-slate-800 text-lg mb-1">${p.name}</h4>
+
+                    <p class="text-slate-500 text-xs mb-4 line-clamp-2">${p.description}</p>
+
+                    <a href="${p.link}" target="_blank" class="text-blue-600 font-bold text-[10px] uppercase tracking-widest hover:underline">View Live Demo →</a>
+
+                </div>
+
+            </div>
+
+        `).join('');
+
+    } catch (err) { console.log("Projects load failed"); }
+
+}
+
+        // 2. Handle POST/PUT
+
+       async function handleProjectSubmit(e) {
+
+    e.preventDefault();
+
+    const id = document.getElementById('p_id').value;
+
+    const fd = new FormData();
+
+    
+
+    fd.append('name', document.getElementById('p_name').value);
+
+    fd.append('description', document.getElementById('p_description').value);
+
+    fd.append('link', document.getElementById('p_link').value);
+
+    fd.append('folder', 'projects'); // Matching your defaultValue in Java
+
+
+
+    const photo = document.getElementById('p_photo').files[0];
+
+    if (photo) fd.append('photo', photo);
+
+
+
+    // Dynamic URL: POST uses /upload, PUT uses /{id}
+
+    const url = id ? `/api/projects/${id}` : '/api/projects/upload';
+
+    const method = id ? 'PUT' : 'POST';
+
+
+
+    try {
+
+        const res = await fetch(url, { method: method, body: fd });
+
+        if (res.ok) {
+
+            alert(id ? "Project Updated!" : "Project Uploaded Successfully!");
+
+            resetProjectForm();
+
+            loadProjects();
+
+        } else {
+
+            const err = await res.json();
+
+            console.error("Upload Error:", err);
+
+        }
+
+    } catch (err) {
+
+        console.error("Connection Error:", err);
+
+    }
+
+}
+
+        // 3. Edit Helper
+
+        async function editProject(id) {
+
+            const res = await fetch(`http://localhost:8080/api/projects/${id}`);
+
+            const p = await res.json();
+
+            
+
+            document.getElementById('p_id').value = p.id;
+
+            document.getElementById('p_name').value = p.name;
+
+            document.getElementById('p_description').value = p.description;
+
+            document.getElementById('p_link').value = p.link;
+
+            document.getElementById('projectSubmitBtn').innerText = "UPDATE PROJECT";
+
+            document.getElementById('projectSubmitBtn').classList.replace('bg-blue-600', 'bg-orange-500');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        }
+
+
+
+        // 4. Delete Logic
+
+        async function deleteProject(id) {
+
+            const res = await fetch(`http://localhost:8080/api/projects/${id}`, { method: 'DELETE' });
+
+            if (res.ok) loadProjects();
+
+        }
+
+
+
+        function resetProjectForm() {
+
+            document.getElementById('p_id').value = "";
+
+            document.getElementById('projectSubmitBtn').innerText = "LAUNCH PROJECT";
+
+            document.getElementById('projectSubmitBtn').classList.replace('bg-orange-500', 'bg-blue-600');
+
+            document.querySelector('#projects form').reset();
+
+        }
+
+
+
+        
+
+        
+
+        //////skill
+
+        
+
+        
+
+        // 1. Fetch Skills (GET)
+
+async function loadSkills() {
+
+    try {
+
+        const res = await fetch('http://localhost:8080/api/skills');
+
+        const data = await res.json();
+
+        const grid = document.getElementById('skillsGrid');
+
+        
+
+        grid.innerHTML = data.map((s, index) => `
+
+            <div class="group bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:border-blue-200 transition-all relative overflow-hidden animate__animated animate__fadeInUp" style="animation-delay: ${index * 0.05}s">
+
+                <div class="text-center">
+
+                    <p class="font-black text-slate-800 text-sm mb-1">${s.name}</p>
+
+                    <span class="px-2 py-0.5 bg-slate-50 text-blue-500 text-[9px] font-bold rounded-md uppercase tracking-tight">
+
+                        ${s.category}
+
+                    </span>
+
+                </div>
+
+
+
+                <div class="absolute inset-0 bg-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer" 
+
+                     onclick="deleteSkill(${s.id}, this)">
+
+                    <span class="text-white text-[10px] font-black uppercase tracking-widest">Delete?</span>
+
+                </div>
+
+            </div>
+
+        `).join('');
+
+        
+
+        // Auto-refresh the skills chart if present
+
+        if(window.myDoughnutChart) updateSkillsChart(data); 
+
+    } catch (err) { console.error("Could not load skills list"); }
+
+}
+
+
+
+// 2. Add Skill (POST)
+
+async function handleSkillSubmit() {
+
+    const nameInput = document.getElementById('s_name');
+
+    const catInput = document.getElementById('s_category');
+
+
+
+    if(!nameInput.value) return alert("Please enter a skill name");
+
+
+
+    const skillData = {
+
+        name: nameInput.value,
+
+        category: catInput.value
+
+        // Level removed as per request
+
+    };
+
+
+
+    try {
+
+        const res = await fetch('http://localhost:8080/api/skills', {
+
+            method: 'POST',
+
+            headers: { 'Content-Type': 'application/json' },
+
+            body: JSON.stringify(skillData)
+
+        });
+
+
+
+        if (res.ok) {
+
+            nameInput.value = ""; 
+
+            loadSkills(); // Refresh the grid
+
+        }
+
+    } catch (err) { console.error("Failed to add skill"); }
+
+}
+
+
+
+// 3. Delete Skill (DELETE)
+
+async function deleteSkill(id, element) {
+
+    const card = element.parentElement;
+
+    card.classList.add('animate__animated', 'animate__zoomOut');
+
+
+
+    setTimeout(async () => {
+
+        try {
+
+            const res = await fetch(`http://localhost:8080/api/skills/${id}`, { method: 'DELETE' });
+
+            if (res.ok) loadSkills();
+
+        } catch (err) { card.classList.remove('animate__zoomOut'); }
+
+    }, 400);
+
+}
+
+
+
+////////Contact 
+
+
+
+
+
+// --- INBOX / MESSAGING LOGIC ---
+
+
+
+async function loadInbox() {
+
+    
+
+    try {
+
+        const res = await fetch('http://localhost:8080/api/contact');
+
+        const data = await res.json();
+
+     // Inside loadInbox() after: const data = await res.json();
+
+        document.getElementById('inboxCount').innerText = `${data.length} Messages`;
+
+        const container = document.getElementById('inboxList');
+
+
+
+        if (data.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
+
+                    <i class="fas fa-envelope-open text-slate-300 text-5xl mb-4"></i>
+
+                    <p class="text-slate-400 font-medium">Your inbox is empty. Quiet day!</p>
+
+                </div>`;
+
+            return;
+
+        }
+
+
+
+        // Sort by newest first
+
+        data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+
+
+        container.innerHTML = data.map((m, index) => `
+
+            <div class="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 hover:border-blue-200 transition-all animate__animated animate__fadeInUp" style="animation-delay: ${index * 0.1}s">
+
+                <div class="flex flex-col md:flex-row justify-between gap-4">
+
+                    <div class="flex-1">
+
+                        <div class="flex items-center gap-3 mb-2">
+
+                            <span class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+
+                            <h4 class="font-black text-slate-800 tracking-tight">${m.subject}</h4>
+
+                        </div>
+
+                        <p class="text-slate-600 text-sm leading-relaxed mb-4 italic">"${m.description}"</p>
+
+                        
+
+                        <div class="flex flex-wrap items-center gap-4 text-[11px] font-bold uppercase tracking-wider">
+
+                            <span class="text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+
+                                <i class="fas fa-user mr-1"></i> ${m.name}
+
+                            </span>
+
+                            <a href="mailto:${m.email}" class="text-slate-400 hover:text-blue-500 transition">
+
+                                <i class="fas fa-envelope mr-1"></i> ${m.email}
+
+                            </a>
+
+                            <span class="text-slate-300">
+
+                                <i class="fas fa-clock mr-1"></i> ${new Date(m.createdAt).toLocaleString()}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="flex md:flex-col justify-end gap-2">
+
+                        <a href="mailto:${m.email}?subject=Re: ${m.subject}" 
+
+                           class="w-10 h-10 flex items-center justify-center bg-slate-50 text-slate-600 rounded-xl hover:bg-blue-600 hover:text-white transition">
+
+                            <i class="fas fa-reply text-xs"></i>
+
+                        </a>
+
+                        <button onclick="deleteMessage(${m.id}, this)" 
+
+                                class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-600 hover:text-white transition">
+
+                            <i class="fas fa-trash-alt text-xs"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `).join('');
+
+    } catch (err) {
+
+        console.error("Inbox load failed", err);
+
+    }
+
+}
+
+
+
+async function deleteMessage(id, btn) {
+
+    if(!confirm("Archive this message permanently?")) return;
+
+    
+
+    const card = btn.closest('.bg-white');
+
+    card.classList.add('animate__animated', 'animate__fadeOutRight');
+
+
+
+    setTimeout(async () => {
+
+        const res = await fetch(`http://localhost:8080/api/contact/${id}`, { method: 'DELETE' });
+
+        if (res.ok) loadInbox();
+
+    }, 500);
+
+}
+
+// Update your initDashboard function
+
+function initDashboard() {
+
+    initCharts(); // Initialize both charts
+
+    loadHomeData();
+
+    switchTab('home');
+
+}
+
+
+
+        
+
+
+
+        // Persistent Login Check
+
+        if(localStorage.getItem('admin_auth') === 'true') {
+
+            document.getElementById('loginOverlay').style.display = 'none';
+
+            initDashboard();
+
+        }
+
+        
+
+     // Add this at the bottom of your script tag
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            console.log("🚀 Admin Panel Loaded. Fetching data...");
+
+            loadWorkData();   // Load the Work Timeline
+
+            loadHomeData();   // Load the Home/Profile data
+
+            // loadProjects(); // Add this later when we build Projects
+
+        });
+
+    </script>
+
+</body>
+
+</html>
+
+

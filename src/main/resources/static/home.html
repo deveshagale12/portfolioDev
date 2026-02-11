@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Professional Portfolio</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+
+<style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+
+
+
+    body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+
+    
+
+    .glass {
+
+        background: rgba(255, 255, 255, 0.75);
+
+        backdrop-filter: blur(15px) saturate(180%);
+
+        -webkit-backdrop-filter: blur(15px) saturate(180%);
+
+    }
+
+
+
+    .gradient-text {
+
+        background: linear-gradient(90deg, #2563eb, #7c3aed);
+
+        -webkit-background-clip: text;
+
+        -webkit-text-fill-color: transparent;
+
+    }
+
+
+
+    /* Mobile specific padding to prevent dock from covering content */
+
+    @media (max-width: 768px) {
+
+        body { padding-bottom: 110px; }
+
+    }
+
+/* Custom focus styles for the dark contact form */
+
+#contact input::placeholder, #contact textarea::placeholder {
+
+    color: #475569;
+
+    font-size: 0.85rem;
+
+}
+
+
+
+#contact input:focus, #contact textarea:focus {
+
+    background: rgba(30, 41, 59, 0.8);
+
+}
+
+
+
+/* Specific styling for the paper plane animation */
+
+.group:hover .fa-paper-plane {
+
+    animation: bounceRight 0.5s ease;
+
+}
+
+footer {
+
+    position: relative;
+
+    z-index: 10;
+
+}
+
+
+
+/* Subtle hover for footer links */
+
+footer a {
+
+    position: relative;
+
+    display: inline-block;
+
+}
+
+
+
+footer a::after {
+
+    content: '';
+
+    position: absolute;
+
+    width: 0;
+
+    height: 1px;
+
+    bottom: -2px;
+
+    left: 0;
+
+    background-color: #2563eb;
+
+    transition: width 0.3s ease;
+
+}
+
+
+
+footer a:hover::after {
+
+    width: 100%;
+
+}
+
+@keyframes bounceRight {
+
+    0%, 100% { transform: translate(0, 0); }
+
+    50% { transform: translate(5px, -5px); }
+
+}
+
+    .hero-shape {
+
+        position: absolute;
+
+        top: -10%; left: -10%; width: 40%; height: 60%;
+
+        background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+
+        z-index: -1;
+
+    }
+
+    .project-card {
+
+    position: relative;
+
+    border-radius: 2rem;
+
+    overflow: hidden;
+
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+}
+
+
+
+.project-card:hover {
+
+    transform: translateY(-10px);
+
+    box-shadow: 0 30px 60px -15px rgba(37, 99, 235, 0.2);
+
+}
+
+
+
+.project-overlay {
+
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.4) 60%, transparent 100%);
+
+    transform: translateY(100%);
+
+    transition: transform 0.5s ease;
+
+}
+
+
+
+.project-card:hover .project-overlay {
+
+    transform: translateY(0);
+
+}
+
+
+
+.project-card img {
+
+    transition: transform 0.7s ease;
+
+}
+
+
+
+.project-card:hover img {
+
+    transform: scale(1.1);
+
+}
+
+
+
+.skill-pill {
+
+    background: white;
+
+    padding: 0.6rem 1.2rem;
+
+    border-radius: 1rem;
+
+    border: 1px solid #f1f5f9;
+
+    font-size: 0.85rem;
+
+    font-weight: 600;
+
+    color: #475569;
+
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+
+    transition: all 0.3s ease;
+
+}
+
+
+
+.skill-pill:hover {
+
+    transform: translateY(-3px);
+
+    border-color: #2563eb;
+
+    color: #2563eb;
+
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.1);
+
+}
+
+.category-label {
+
+    font-size: 0.75rem;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.1em;
+
+    color: #94a3b8;
+
+    margin-bottom: 1rem;
+
+    display: block;
+
+}
+
+
+
+    .active-nav-link:active { transform: scale(0.9); transition: 0.2s; }
+
+</style>
+
+</head>
+
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
+
+
+
+    <div class="hero-shape"></div>
+
+
+
+    <nav class="fixed top-0 w-full z-50 glass border-b border-slate-100">
+
+        <div class="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+
+            <div class="flex items-center gap-3">
+
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white font-black shadow-lg">P</div>
+
+                <span id="navName" class="font-black text-xl tracking-tighter uppercase">Portfolio</span>
+
+            </div>
+
+            
+
+            <div class="hidden md:flex items-center gap-8 text-[11px] font-bold uppercase tracking-widest text-slate-500">
+
+                <a href="#projects" class="hover:text-blue-600 transition">Projects</a>
+
+                <a href="#experience" class="hover:text-blue-600 transition">Journey</a>
+
+                <a href="#skills" class="hover:text-blue-600 transition">Arsenal</a>
+
+                <a href="#contact" class="bg-slate-900 text-white px-6 py-3 rounded-2xl hover:bg-blue-600 transition shadow-xl">Hire Me</a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+
+    <header class="pt-48 pb-20 px-6 relative overflow-hidden">
+
+    <div class="max-w-6xl mx-auto flex flex-col items-center text-center">
+
+        <div class="relative mb-12 animate__animated animate__zoomIn">
+
+            <div class="absolute -inset-6 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 rounded-full blur-3xl opacity-70 animate-pulse"></div>
+
+            <div class="relative w-64 h-64 md:w-80 md:h-80 rounded-full p-2 bg-white shadow-2xl shadow-blue-900/20 profile-float">
+
+                <img id="profilePhoto" src="" class="w-full h-full rounded-full object-cover border-[8px] border-slate-50 shadow-inner">
+
+            </div>
+
+        </div>
+
+
+
+        <h1 class="text-6xl md:text-9xl font-black text-slate-900 leading-[0.95] mb-4 tracking-tighter">
+
+            I'm <span id="heroName" class="gradient-text">Developer</span>.
+
+        </h1>
+
+        
+
+        <p id="heroRole" class="text-xl md:text-2xl font-bold text-slate-700 mb-4"></p>
+
+        <p id="heroBio" class="text-slate-500 max-w-2xl mx-auto mb-8 text-sm md:text-base"></p>
+
+
+
+        <div class="flex flex-wrap justify-center gap-4">
+
+            <a id="link-cv" href="#" target="_blank" class="bg-blue-600 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition shadow-xl">
+
+                Get My CV <i class="fas fa-arrow-down ml-2"></i>
+
+            </a>
+
+            <div class="flex gap-2">
+
+                <a id="link-github" href="#" target="_blank" class="w-14 h-14 flex items-center justify-center rounded-2xl bg-white border border-slate-100 text-slate-800 hover:shadow-lg transition"><i class="fab fa-github text-xl"></i></a>
+
+                <a id="link-linkedin" href="#" target="_blank" class="w-14 h-14 flex items-center justify-center rounded-2xl bg-white border border-slate-100 text-[#0077b5] hover:shadow-lg transition"><i class="fab fa-linkedin-in text-xl"></i></a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+    <section class="max-w-6xl mx-auto px-6 mb-32">
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm text-center">
+
+                <h3 id="stat-projects" class="text-4xl font-black text-slate-800 mb-1">0</h3>
+
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Projects</p>
+
+            </div>
+
+            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm text-center">
+
+                <h3 id="stat-experience" class="text-4xl font-black text-blue-600 mb-1">0</h3>
+
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Experience</p>
+
+            </div>
+
+            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm text-center">
+
+                <h3 id="stat-skills" class="text-4xl font-black text-slate-800 mb-1">0</h3>
+
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tech Stack</p>
+
+            </div>
+
+            <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm text-center">
+
+                <h3 class="text-4xl font-black text-indigo-600 mb-1">24/7</h3>
+
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Available</p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+<section id="projects" class="max-w-7xl mx-auto px-6 py-32">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+
+        <div class="space-y-4">
+
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-widest">
+
+                Portfolio session
+
+            </div>
+
+            <h2 class="text-5xl md:text-6xl font-black text-slate-900 tracking-tight">
+
+                Selected <span class="gradient-text">Works</span>
+
+            </h2>
+
+        </div>
+
+      
+
+    </div>
+
+
+
+    <div id="projectGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+        </div>
+
+</section>
+
+    <section class="bg-white py-32 border-y border-slate-100">
+
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-24">
+
+        
+
+        <div id="experience">
+
+            <div class="flex items-center gap-4 mb-12">
+
+                <div class="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+
+                    <i class="fas fa-briefcase"></i>
+
+                </div>
+
+                <h2 class="text-4xl font-black text-slate-900 tracking-tight">Professional Journey</h2>
+
+            </div>
+
+            
+
+            <div id="workList" class="relative border-l-2 border-slate-100 ml-6 space-y-12">
+
+                </div>
+
+        </div>
+
+
+
+        <div id="skills">
+
+            <div class="bg-slate-50 p-8 md:p-12 rounded-[3.5rem] border border-slate-100 relative overflow-hidden">
+
+                <div class="absolute top-0 right-0 w-32 h-32 bg-blue-100/50 blur-3xl rounded-full -mr-16 -mt-16"></div>
+
+
+
+                <h2 class="text-3xl font-black mb-10 tracking-tight text-center md:text-left">Technical Arsenal</h2>
+
+                
+
+                <div class="relative h-[280px] mb-12">
+
+                    <canvas id="skillsDoughnut"></canvas>
+
+                    <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+
+                        <span id="skillCountCenter" class="text-5xl font-black text-slate-900 leading-none">0</span>
+
+                        <span class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mt-2">Total Tools</span>
+
+                    </div>
+
+                </div>
+
+
+
+                <div id="skillCategories" class="space-y-8">
+
+                    </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+    <section id="contact" class="max-w-7xl mx-auto px-6 py-32">
+
+    <div class="bg-slate-900 rounded-[3.5rem] p-8 md:p-16 overflow-hidden relative">
+
+        <div class="absolute top-0 right-0 w-96 h-96 bg-blue-600/20 blur-[120px] rounded-full -mr-48 -mt-48"></div>
+
+        <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-600/10 blur-[100px] rounded-full -ml-32 -mb-32"></div>
+
+
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10">
+
+            <div class="space-y-10">
+
+                <div class="space-y-4">
+
+                    <h2 class="text-5xl md:text-7xl font-black text-white tracking-tighter">
+
+                        Let's build <br><span class="text-blue-500">together.</span>
+
+                    </h2>
+
+                    <p class="text-slate-400 text-lg max-w-md leading-relaxed">
+
+                        Have a project in mind or just want to say hi? My inbox is always open.
+
+                    </p>
+
+                </div>
+
+
+
+                <div class="space-y-6">
+
+                    <div class="flex items-center gap-5 group">
+
+                        <div class="w-12 h-12 rounded-2xl bg-slate-800 flex items-center justify-center text-blue-500 border border-slate-700 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+
+                            <i class="fas fa-envelope"></i>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs font-black text-slate-500 uppercase tracking-widest">Email Me</p>
+
+                            <p id="contact-email" class="text-white font-bold">agaledeva$@gmail.com</p>
+
+                        </div>
+
+                    </div>
+
+                    
+
+                    <div class="flex items-center gap-5 group">
+
+                        <div class="w-12 h-12 rounded-2xl bg-slate-800 flex items-center justify-center text-blue-500 border border-slate-700 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+
+                            <i class="fas fa-map-marker-alt"></i>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs font-black text-slate-500 uppercase tracking-widest">Location</p>
+
+                            <p class="text-white font-bold">Remote / Global</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="bg-white/5 backdrop-blur-xl p-8 md:p-10 rounded-[2.5rem] border border-white/10 shadow-2xl">
+
+                <form onsubmit="handleMessageSubmit(event)" class="space-y-5">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                        <div class="space-y-2">
+
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Name</label>
+
+                            <input type="text" id="m_name" placeholder="John Doe" required 
+
+                                class="w-full p-4 rounded-2xl bg-slate-800/50 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all">
+
+                        </div>
+
+                        <div class="space-y-2">
+
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email</label>
+
+                            <input type="email" id="m_email" placeholder="john@example.com" required 
+
+                                class="w-full p-4 rounded-2xl bg-slate-800/50 border border-slate-700 text-white outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all">
+
+                        </div>
+
+                    </div>
+
+                    <div class="space-y-2">
+
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Subject</label>
+
+                        <input type="text" id="m_subject" placeholder="Project Inquiry" required 
+
+                            class="w-full p-4 rounded-2xl bg-slate-800/50 border border-slate-100/10 text-white outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all">
+
+                    </div>
+
+                    <div class="space-y-2">
+
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Message</label>
+
+                        <textarea id="m_desc" placeholder="Tell me about your project..." required 
+
+                            class="w-full p-4 rounded-2xl bg-slate-800/50 border border-slate-100/10 text-white outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all h-32 resize-none"></textarea>
+
+                    </div>
+
+                    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-5 rounded-2xl font-black shadow-2xl shadow-blue-600/20 flex items-center justify-center gap-3 group transition-all duration-300">
+
+                        SEND MESSAGE 
+
+                        <i class="fas fa-paper-plane group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+    <div class="md:hidden fixed bottom-6 left-6 right-6 h-20 glass rounded-[2.5rem] shadow-2xl border border-white/20 z-[100] flex items-center justify-around px-4 animate__animated animate__fadeInUp">
+
+        <a href="#projects" class="active-nav-link flex flex-col items-center gap-1 text-slate-400 hover:text-blue-600 transition">
+
+            <i class="fas fa-project-diagram text-lg"></i>
+
+            <span class="text-[9px] font-black uppercase tracking-tighter">Projects</span>
+
+        </a>
+
+        <a href="#experience" class="active-nav-link flex flex-col items-center gap-1 text-slate-400 hover:text-blue-600 transition">
+
+            <i class="fas fa-map-signs text-lg"></i>
+
+            <span class="text-[9px] font-black uppercase tracking-tighter">Journey</span>
+
+        </a>
+
+        <a href="#skills" class="active-nav-link flex flex-col items-center gap-1 text-slate-400 hover:text-blue-600 transition">
+
+            <i class="fas fa-microchip text-lg"></i>
+
+            <span class="text-[9px] font-black uppercase tracking-tighter">Arsenal</span>
+
+        </a>
+
+        <a href="#contact" class="active-nav-link flex flex-col items-center gap-1 text-slate-400 hover:text-blue-600 transition">
+
+            <i class="fas fa-envelope-open-text text-lg"></i>
+
+            <span class="text-[9px] font-black uppercase tracking-tighter">Connect</span>
+
+        </a>
+
+    </div>
+
+<footer class="bg-white border-t border-slate-100 pt-20 pb-10">
+
+    <div class="max-w-7xl mx-auto px-6">
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+
+            <div class="col-span-1 md:col-span-1 space-y-6">
+
+                <div class="flex items-center gap-3">
+
+                    <div class="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white font-black">P</div>
+
+                    <span class="font-black text-xl tracking-tighter uppercase">Portfolio</span>
+
+                </div>
+
+                <p class="text-slate-500 text-sm leading-relaxed">
+
+                    Crafting digital experiences with a focus on clean code and user-centric design. Let's build something extraordinary.
+
+                </p>
+
+            </div>
+
+
+
+            <div class="space-y-6">
+
+                <h4 class="text-xs font-black uppercase tracking-[0.2em] text-slate-900">Navigation</h4>
+
+                <ul class="space-y-4 text-sm font-bold text-slate-500">
+
+                    <li><a href="#" class="hover:text-blue-600 transition">Top</a></li>
+
+                    <li><a href="#projects" class="hover:text-blue-600 transition">Projects</a></li>
+
+                    <li><a href="#experience" class="hover:text-blue-600 transition">Experience</a></li>
+
+                    <li><a href="#contact" class="hover:text-blue-600 transition">Contact</a></li>
+
+                    <li><a href="admin.html" class="hover:text-blue-600 transition">Admin</a></li>
+
+                </ul>
+
+            </div>
+
+
+
+            <div class="space-y-6">
+
+                <h4 class="text-xs font-black uppercase tracking-[0.2em] text-slate-900">Expertise</h4>
+
+                <ul class="space-y-4 text-sm font-bold text-slate-500">
+
+                    <li>Web Development</li>
+
+                    <li>UI/UX Strategy</li>
+
+                    <li>System Architecture</li>
+
+                    <li>API Design</li>
+
+                </ul>
+
+            </div>
+
+
+
+            <div class="space-y-6">
+
+                <h4 class="text-xs font-black uppercase tracking-[0.2em] text-slate-900">Connect</h4>
+
+                <div class="flex gap-4">
+
+                    <a href="#" id="footer-github" class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-blue-600 hover:text-white transition-all"><i class="fab fa-github"></i></a>
+
+                    <a href="#" id="footer-linkedin" class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-blue-600 hover:text-white transition-all"><i class="fab fa-linkedin-in"></i></a>
+
+                </div>
+
+                <div class="pt-2">
+
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-50 text-green-600 text-[10px] font-black uppercase tracking-widest">
+
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+
+                        Status: Active
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="pt-10 border-t border-slate-100 flex flex-col md:row items-center justify-between gap-6">
+
+            <p class="text-slate-400 text-[11px] font-bold uppercase tracking-widest">
+
+                © 2026 All Rights Reserved. Built with <span class="text-red-500">♥</span> & Spring Boot.
+
+            </p>
+
+            <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-12 h-12 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-all">
+
+                <i class="fas fa-arrow-up"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</footer>
+
+    <script>
+
+    const API = "http://localhost:8080/api";
+
+
+
+    async function init() {
+
+        try {
+
+            console.log("Initializing Portfolio Data...");
+
+
+
+            // 1. FETCH PROFILE DATA
+
+            const profileRes = await fetch(`${API}/home-profile`);
+
+            if (!profileRes.ok) throw new Error("Profile record not found");
+
+            const profile = await profileRes.json();
+
+
+
+            if (profile) {
+
+                // Populate Hero & Nav
+
+                document.getElementById('profilePhoto').src = `http://localhost:8080/${profile.photoPath}`;
+
+                document.getElementById('navName').innerText = profile.fullName;
+
+                document.getElementById('heroName').innerText = profile.fullName;
+
+                document.getElementById('heroRole').innerText = profile.role;
+
+                document.getElementById('heroBio').innerText = profile.bio;
+
+                document.getElementById('stat-experience').innerText = profile.experience;
+
+
+
+                // Social Links & CV
+
+                if (document.getElementById('link-github')) document.getElementById('link-github').href = profile.githubUrl || "#";
+
+                if (document.getElementById('link-linkedin')) document.getElementById('link-linkedin').href = profile.linkedinUrl || "#";
+
+                if (document.getElementById('link-cv')) document.getElementById('link-cv').href = `http://localhost:8080/${profile.cvPath}`;
+
+            }
+
+
+
+            // 2. FETCH PROJECTS, WORK, AND SKILLS SIMULTANEOUSLY
+
+            const [pData, wData, sData] = await Promise.all([
+
+                fetch(`${API}/projects`).then(r => r.json()),
+
+                fetch(`${API}/work`).then(r => r.json()),
+
+                fetch(`${API}/skills`).then(r => r.json())
+
+            ]);
+
+
+
+         // Inside your init() function
+
+            if(profile.email) {
+
+                document.getElementById('contact-email').innerText = profile.email;
+
+            }
+
+            // 3. POPULATE GLOBAL STATS
+
+            document.getElementById('stat-projects').innerText = pData.length;
+
+            document.getElementById('stat-skills').innerText = sData.length;
+
+            document.getElementById('skillCountCenter').innerText = sData.length;
+
+
+
+            // 4. RENDER PROJECTS (Bento Grid Style)
+
+            document.getElementById('projectGrid').innerHTML = pData.map((p, index) => `
+
+                <div class="project-card bg-white group h-[450px] shadow-sm animate__animated animate__fadeInUp" style="animation-delay: ${index * 0.1}s">
+
+                    <img src="http://localhost:8080/${p.photoPath}" class="w-full h-full object-cover">
+
+                    <div class="project-overlay absolute inset-0 flex flex-col justify-end p-8 text-white">
+
+                        <div class="space-y-3">
+
+                            <div class="flex items-center gap-2">
+
+                                <span class="w-8 h-[2px] bg-blue-500"></span>
+
+                                <span class="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">Featured Project</span>
+
+                            </div>
+
+                            <h4 class="text-2xl font-black leading-tight">${p.name}</h4>
+
+                            <p class="text-slate-300 text-sm line-clamp-2 font-medium">${p.description}</p>
+
+                            <div class="pt-4 flex items-center justify-between">
+
+                                <a href="${p.link}" target="_blank" class="inline-flex items-center gap-2 bg-white text-slate-900 px-5 py-2.5 rounded-xl font-black text-[11px] uppercase tracking-wider hover:bg-blue-600 hover:text-white transition-colors">
+
+                                    Live Preview <i class="fas fa-external-link-alt"></i>
+
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `).join('');
+
+            
+
+            
+
+            async function handleMessageSubmit(e) {
+
+                e.preventDefault();
+
+                const btn = e.target.querySelector('button');
+
+                const modal = document.getElementById('successModal');
+
+                const originalText = btn.innerHTML;
+
+                
+
+                try {
+
+                    // Loading state
+
+                    btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> SENDING...`;
+
+                    btn.disabled = true;
+
+
+
+                    const data = {
+
+                        name: document.getElementById('m_name').value,
+
+                        email: document.getElementById('m_email').value,
+
+                        subject: document.getElementById('m_subject').value,
+
+                        description: document.getElementById('m_desc').value
+
+                    };
+
+
+
+                    const res = await fetch(`${API}/contact`, {
+
+                        method: 'POST',
+
+                        headers: { 'Content-Type': 'application/json' },
+
+                        body: JSON.stringify(data)
+
+                    });
+
+
+
+                    if (res.ok) {
+
+                        // Show Modal
+
+                        modal.classList.remove('hidden');
+
+                        modal.classList.add('flex');
+
+                        e.target.reset();
+
+                    } else {
+
+                        throw new Error("Server error");
+
+                    }
+
+                } catch (err) {
+
+                    alert("Something went wrong. Please try again later.");
+
+                } finally {
+
+                    btn.innerHTML = originalText;
+
+                    btn.disabled = false;
+
+                }
+
+            }
+
+
+
+            function closeModal() {
+
+                const modal = document.getElementById('successModal');
+
+                modal.classList.add('animate__fadeOut');
+
+                setTimeout(() => {
+
+                    modal.classList.add('hidden');
+
+                    modal.classList.remove('flex', 'animate__fadeOut');
+
+                }, 500);
+
+            }
+
+
+
+            // 5. RENDER WORK JOURNEY (Timeline Cards)
+
+            document.getElementById('workList').innerHTML = wData.map(w => `
+
+                <div class="relative pl-10 group">
+
+                    <div class="absolute -left-[11px] top-2 w-5 h-5 rounded-full bg-white border-4 border-blue-600 shadow-sm transition-transform group-hover:scale-125"></div>
+
+                    <div class="bg-slate-50 p-6 rounded-3xl border border-transparent hover:border-blue-100 hover:bg-white transition-all">
+
+                        <span class="text-[10px] font-black text-blue-500 uppercase tracking-widest">${w.time}</span>
+
+                        <h4 class="text-xl font-black text-slate-800 mt-2">${w.nameOfWork}</h4>
+
+                        <p class="text-slate-500 text-sm mt-2 leading-relaxed">${w.description}</p>
+
+                    </div>
+
+                </div>
+
+            `).join('');
+
+
+
+            // 6. RENDER CATEGORIZED SKILLS (Pill Tags)
+
+            const groupedSkills = sData.reduce((acc, skill) => {
+
+                const cat = skill.category || "General";
+
+                if (!acc[cat]) acc[cat] = [];
+
+                acc[cat].push(skill.name);
+
+                return acc;
+
+            }, {});
+
+
+
+            const categoryContainer = document.getElementById('skillCategories');
+
+            if (categoryContainer) {
+
+                categoryContainer.innerHTML = Object.entries(groupedSkills).map(([category, names]) => `
+
+                    <div class="mb-8">
+
+                        <span class="category-label text-[10px] font-black uppercase tracking-widest text-slate-400 mb-4 block">
+
+                            ${category}
+
+                        </span>
+
+                        <div class="flex flex-wrap gap-3">
+
+                            ${names.map(name => `<div class="skill-pill animate__animated animate__fadeIn">${name}</div>`).join('')}
+
+                        </div>
+
+                    </div>
+
+                `).join('');
+
+            }
+
+
+
+            // 7. INITIALIZE SKILLS CHART
+
+            renderChart(sData);
+
+
+
+        } catch (err) {
+
+            console.error("Portfolio Initialization Failed:", err);
+
+        }
+
+    }
+
+
+
+    // CHART.JS CONFIGURATION
+
+    function renderChart(skills) {
+
+        const cats = {};
+
+        skills.forEach(s => cats[s.category || "General"] = (cats[s.category || "General"] || 0) + 1);
+
+        
+
+        const ctx = document.getElementById('skillsDoughnut');
+
+        if (!ctx) return;
+
+
+
+        new Chart(ctx, {
+
+            type: 'doughnut',
+
+            data: {
+
+                labels: Object.keys(cats),
+
+                datasets: [{
+
+                    data: Object.values(cats),
+
+                    backgroundColor: ['#2563eb', '#8b5cf6', '#06b6d4', '#ec4899', '#f59e0b'],
+
+                    borderWidth: 8,
+
+                    borderRadius: 12,
+
+                    borderColor: '#f8fafc',
+
+                    hoverOffset: 15
+
+                }]
+
+            },
+
+            options: {
+
+                cutout: '80%',
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                plugins: {
+
+                    legend: {
+
+                        position: 'bottom',
+
+                        labels: {
+
+                            usePointStyle: true,
+
+                            padding: 25,
+
+                            font: { weight: '800', size: 10 }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        });
+
+    }
+
+
+
+    // CONTACT FORM SUBMISSION
+
+    async function handleMessageSubmit(e) {
+
+        e.preventDefault();
+
+        const btn = e.target.querySelector('button');
+
+        const originalText = btn.innerText;
+
+        
+
+        try {
+
+            btn.innerText = "SENDING...";
+
+            btn.disabled = true;
+
+
+
+            const data = {
+
+                name: document.getElementById('m_name').value,
+
+                email: document.getElementById('m_email').value,
+
+                subject: document.getElementById('m_subject').value,
+
+                description: document.getElementById('m_desc').value
+
+            };
+
+
+
+            const res = await fetch(`${API}/contact`, {
+
+                method: 'POST',
+
+                headers: { 'Content-Type': 'application/json' },
+
+                body: JSON.stringify(data)
+
+            });
+
+
+
+            if (res.ok) {
+
+                alert("Message Sent Successfully!");
+
+                e.target.reset();
+
+            } else {
+
+                throw new Error("Failed to send");
+
+            }
+
+        } catch (err) {
+
+            alert("Error sending message. Please try again.");
+
+        } finally {
+
+            btn.innerText = originalText;
+
+            btn.disabled = false;
+
+        }
+
+    }
+
+
+
+    // START
+
+    document.addEventListener('DOMContentLoaded', init);
+
+    </script>
+
+    <div id="successModal" class="fixed inset-0 z-[200] hidden items-center justify-center px-4">
+
+    <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
+
+    
+
+    <div class="relative bg-white rounded-[3rem] p-10 md:p-16 max-w-sm w-full text-center shadow-2xl animate__animated animate__zoomIn">
+
+        <div class="w-24 h-24 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-8">
+
+            <i class="fas fa-check text-4xl"></i>
+
+        </div>
+
+        <h3 class="text-3xl font-black text-slate-900 mb-4">Sent!</h3>
+
+        <p class="text-slate-500 font-medium mb-10">Thanks for reaching out. I'll get back to you within 24 hours.</p>
+
+        <button onclick="closeModal()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-colors">
+
+            Back to Portfolio
+
+        </button>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
+
+​
