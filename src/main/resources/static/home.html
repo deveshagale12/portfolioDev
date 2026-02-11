@@ -824,7 +824,7 @@ footer a:hover::after {
 
     <script>
 
-    const API = "http://localhost:8080/api";
+    const API = "https://portfoliodev-hy0w.onrender.com/api";
 
 
 
@@ -850,7 +850,7 @@ footer a:hover::after {
 
                 // Populate Hero & Nav
 
-                document.getElementById('profilePhoto').src = `http://localhost:8080/${profile.photoPath}`;
+                document.getElementById('profilePhoto').src = `/${profile.photoPath}`;
 
                 document.getElementById('navName').innerText = profile.fullName;
 
@@ -870,7 +870,7 @@ footer a:hover::after {
 
                 if (document.getElementById('link-linkedin')) document.getElementById('link-linkedin').href = profile.linkedinUrl || "#";
 
-                if (document.getElementById('link-cv')) document.getElementById('link-cv').href = `http://localhost:8080/${profile.cvPath}`;
+                if (document.getElementById('link-cv')) document.getElementById('link-cv').href = `/${profile.cvPath}`;
 
             }
 
@@ -914,7 +914,7 @@ footer a:hover::after {
 
                 <div class="project-card bg-white group h-[450px] shadow-sm animate__animated animate__fadeInUp" style="animation-delay: ${index * 0.1}s">
 
-                    <img src="http://localhost:8080/${p.photoPath}" class="w-full h-full object-cover">
+                    <img src="/${p.photoPath}" class="w-full h-full object-cover">
 
                     <div class="project-overlay absolute inset-0 flex flex-col justify-end p-8 text-white">
 
