@@ -1,12 +1,14 @@
 
 package com.portfolio_dev;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/projects")
 @CrossOrigin(origins = "*")
@@ -31,17 +33,17 @@ public class ProjectController {
      * Automatically links the project to the single existing user profile.
      */
     @PostMapping("/add")
-    public ResponseEntity<?> addProject(@RequestBody Project project) {
-        // Find your single user profile (first one in DB)
-        User user = userRepository.findAll().stream().findFirst()
-                .orElseThrow(() -> new RuntimeException("Profile not found. Create user profile first!"));
+public ResponseEntity<?> addProject(@RequestBody Project project) {
+    Optional<User> userOptional = userRepository.findAll().stream().findFirst();
 
-        // Set the relationship
-        project.setUser(user);
-        
-        Project savedProject = projectRepository.save(project);
-        return ResponseEntity.ok(savedProject);
+    if (userOptional.isEmpty()) {
+        return ResponseEntity.status(HttpStatus.PRECONDITION_FAILED)
+            .body(Map.of("error", "You must create a profile via /portfolio/create before adding projects."));
     }
+
+    project.setUser(userOptional.get());
+    return ResponseEntity.ok(projectRepository.save(project));
+}
 
     /**
      * UPDATE an existing project by ID.

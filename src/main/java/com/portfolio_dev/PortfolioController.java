@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Map;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 @RestController
@@ -42,21 +42,28 @@ public class PortfolioController {
      * Updates your existing data in NeonDB.
      */
     @PutMapping("/update")
-    public ResponseEntity<User> updateMyPortfolio(@RequestBody User details) {
-        User user = userRepository.findAll().stream().findFirst().get();
+public ResponseEntity<?> updateMyPortfolio(@RequestBody User details) {
+    return userRepository.findAll().stream().findFirst()
+        // Adding this type hint tells Java to treat the result as a generic ResponseEntity
+        .<ResponseEntity<?>>map(user -> {
+            user.setFullName(details.getFullName());
+            user.setProfessionalTitle(details.getProfessionalTitle());
+            user.setBio(details.getBio());
+            user.setEmail(details.getEmail());
+            user.setLocation(details.getLocation());
+            user.setResumeUrl(details.getResumeUrl());
+            user.setGithubUrl(details.getGithubUrl());
+            user.setLinkedinUrl(details.getLinkedinUrl());
+            user.setTwitterUrl(details.getTwitterUrl());
 
-        user.setFullName(details.getFullName());
-        user.setProfessionalTitle(details.getProfessionalTitle());
-        user.setBio(details.getBio());
-        user.setEmail(details.getEmail()); // <-- Add this
-        user.setLocation(details.getLocation()); // <-- Add this
-        user.setResumeUrl(details.getResumeUrl()); // <-- Add this
-        user.setGithubUrl(details.getGithubUrl()); // <-- Add this
-        user.setLinkedinUrl(details.getLinkedinUrl()); // <-- Add this
-        user.setTwitterUrl(details.getTwitterUrl()); // <-- Add this
-
-        return ResponseEntity.ok(userRepository.save(user));
-    }
+            User savedUser = userRepository.save(user);
+            return ResponseEntity.ok(savedUser); // Returns ResponseEntity<User>
+        })
+        .orElse(ResponseEntity.status(404).body(Map.of(
+            "status", "error",
+            "message", "No profile found. Please use the POST /create endpoint first."
+        ))); // Returns ResponseEntity<Map>
+}
     @Async("threadPoolTaskExecutor")
     @GetMapping("/profile")
     public CompletableFuture<ResponseEntity<User>> getMyProfile() {
