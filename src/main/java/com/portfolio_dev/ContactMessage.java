@@ -1,45 +1,23 @@
-package com.portfolio_dev;
 
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-
 @Entity
+@Table(name = "contact_messages")
+
 public class ContactMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    
-    @NotBlank(message = "Email is required")
-    @Email(message = "Please provide a valid email")
-    private String email;    // The visitor's email address
-    
-    @NotBlank(message = "Message cannot be empty")
+    private String senderName;
+    private String senderEmail;
     private String subject;
     
     @Column(columnDefinition = "TEXT")
-    private String description;
-    
+    private String message;
 
-    // This method runs automatically before the record is saved to the DB
-  
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    private LocalDateTime createdAt = LocalDateTime.now(); // Automatically track when it was sent
-
-    
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 	public Long getId() {
 		return id;
 	}
@@ -48,20 +26,20 @@ public class ContactMessage {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getSenderName() {
+		return senderName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setSenderName(String senderName) {
+		this.senderName = senderName;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getSenderEmail() {
+		return senderEmail;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setSenderEmail(String senderEmail) {
+		this.senderEmail = senderEmail;
 	}
 
 	public String getSubject() {
@@ -72,12 +50,12 @@ public class ContactMessage {
 		this.subject = subject;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public LocalDateTime getCreatedAt() {
@@ -87,8 +65,7 @@ public class ContactMessage {
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
-
-    // Getters and Setters
+    
     
     
 }

@@ -1,57 +1,39 @@
-package com.portfolio_dev;
 
-import java.util.List;
-
+import com.yourpackage.repository.ContactRepository;
+import com.yourpackage.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 @RestController
-@RequestMapping("/api/contact")
+@RequestMapping("/api/v1/contact")
 @CrossOrigin(origins = "*")
 public class ContactController {
 
-	@Autowired
-	private ContactRepository repository;
+    @Autowired private ContactRepository contactRepo;
+    @Autowired private EmailService emailService; // Inject the service instead
 
-	
+    @PostMapping("/send")
+    public ResponseEntity<?> sendMessage(@RequestBody ContactMessage msg) {
+        // 1. Save to Database (Immediate)
+        msg.setCreatedAt(LocalDateTime.now());
+        ContactMessage saved = contactRepo.save(msg);
 
-	@Autowired
-    private EmailService emailService; // Injecting the service here
-
-	@PostMapping
-	public ContactMessage sendMessage(@RequestBody ContactMessage message) {
-	    ContactMessage saved = repository.save(message);
-
-	    try {
-	        // 1. Alert you
-	        emailService.sendContactEmail(saved.getEmail(), saved.getName(), 
-	                                     saved.getSubject(), saved.getDescription());
-
-	        // 2. Auto-mail the user
-	        emailService.sendThankYouEmail(saved.getEmail(), saved.getName());
-	        
-	    } catch (Exception e) {
-	        System.err.println("Emailing failed: " + e.getMessage());
-	    }
-
-	    return saved;
-	}
-
-	
-	// 2. GET: View all messages (Used by you)
-	@GetMapping
-	public List<ContactMessage> getAllMessages() {
-		return repository.findAll();
-	}
-
-	// 3. DELETE: Remove a message
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteMessage(@PathVariable Long id) {
-		if (repository.existsById(id)) {
-			repository.deleteById(id);
-			return ResponseEntity.ok("Message deleted.");
-		}
-		return ResponseEntity.notFound().build();
-	}
+        // 2. Trigger the Email in the background
+        emailService.sendEmailAsync(saved);
+        
+        // 3. Respond to the user immediately
+        return ResponseEntity.status(201).body(Map.of(
+            "status", "success",
+            "message", "Message received! We will get back to you soon."
+        ));
+    }
+    @GetMapping("/inbox")
+    public ResponseEntity<List<ContactMessage>> getInbox() {
+        // Fetches all messages from NeonDB
+        return ResponseEntity.ok(contactRepo.findAll());
+    }
 }

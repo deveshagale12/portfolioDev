@@ -1,50 +1,88 @@
-package com.portfolio_dev;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.yourpackage.model.Skill;
+import com.yourpackage.model.User;
+import com.yourpackage.repository.SkillRepository;
+import com.yourpackage.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 @RestController
-@RequestMapping("/api/skills")
+@RequestMapping("/api/v1/skills")
 @CrossOrigin(origins = "*")
 public class SkillController {
 
     @Autowired
-    private SkillRepository repository;
+    private SkillRepository skillRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    /**
+     * GET all skills.
+     */
     @GetMapping
-    public List<Skill> getAllSkills() {
-        return repository.findAll();
+    public ResponseEntity<List<Skill>> getAllSkills() {
+        return ResponseEntity.ok(skillRepository.findAll());
     }
 
-    @PostMapping
-    public Skill addSkill(@RequestBody Skill skill) {
-        return repository.save(skill);
+    /**
+     * POST: Add a new skill.
+     * Automatically links to your single portfolio user.
+     */
+    @PostMapping("/add")
+    public ResponseEntity<?> addSkill(@RequestBody Skill skill) {
+        return userRepository.findAll().stream()
+            .findFirst()
+            // Adding the type hint here solves the 'orElseGet' error
+            .<ResponseEntity<?>>map(user -> {
+                skill.setUser(user);
+                Skill saved = skillRepository.save(skill);
+                return ResponseEntity.status(201).body(saved);
+            })
+            .orElseGet(() -> ResponseEntity.status(404).body(Map.of(
+                "status", "error",
+                "message", "User profile not found. Create a profile first!"
+            )));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Skill> updateSkill(@PathVariable Long id, @RequestBody Skill skillDetails) {
-        Optional<Skill> optionalSkill = repository.findById(id);
-        
-        if (optionalSkill.isPresent()) {
-            Skill skill = optionalSkill.get();
-            skill.setName(skillDetails.getName());
-            skill.setCategory(skillDetails.getCategory());
-            return ResponseEntity.ok(repository.save(skill));
-        } else {
-            return ResponseEntity.notFound().build();
+    /**
+     * PUT: Update existing skill.
+     * Fixed with explicit type hint to prevent Generic mismatch.
+     */
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateSkill(@PathVariable Long id, @RequestBody Skill skillDetails) {
+        return skillRepository.findById(id)
+            .<ResponseEntity<?>>map(skill -> {
+                skill.setName(skillDetails.getName());
+                skill.setCategory(skillDetails.getCategory());
+                skill.setProficiencyLevel(skillDetails.getProficiencyLevel());
+                
+                return ResponseEntity.ok(skillRepository.save(skill));
+            })
+            .orElseGet(() -> ResponseEntity.status(404).body(Map.of(
+                "status", "error",
+                "message", "Skill with ID " + id + " not found"
+            )));
+    }
+
+    /**
+     * DELETE: Remove a skill.
+     */
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteSkill(@PathVariable Long id) {
+        if (skillRepository.existsById(id)) {
+            skillRepository.deleteById(id);
+            return ResponseEntity.ok(Map.of(
+                "status", "success",
+                "message", "Skill deleted successfully"
+            ));
         }
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteSkill(@PathVariable Long id) {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-            return ResponseEntity.ok("Skill deleted successfully.");
-        }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(404).body(Map.of(
+            "status", "error",
+            "message", "Cannot delete. Skill ID " + id + " not found"
+        ));
     }
 }

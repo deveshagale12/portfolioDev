@@ -1,127 +1,74 @@
-package com.portfolio_dev;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.List;
-import java.util.UUID;
 
+import com.yourpackage.model.Project;
+import com.yourpackage.model.User;
+import com.yourpackage.repository.ProjectRepository;
+import com.yourpackage.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 @RestController
-@RequestMapping("/api/projects")
-@CrossOrigin(origins = "*") // Allows your frontend to call this API
+@RequestMapping("/api/v1/projects")
+@CrossOrigin(origins = "*")
 public class ProjectController {
 
     @Autowired
-    private ProjectRepository repository;
+    private ProjectRepository projectRepository;
 
-    // 1. GET ALL PROJECTS
+    @Autowired
+    private UserRepository userRepository;
+
+    /**
+     * GET all projects for the portfolio.
+     */
     @GetMapping
-    public List<Project> getAll() {
-        return repository.findAll();
+    public ResponseEntity<List<Project>> getAllProjects() {
+        return ResponseEntity.ok(projectRepository.findAll());
     }
 
-    // 2. CREATE PROJECT (POST)
- // Modified POST method to include a "folder" parameter
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Project addProject(
-            @RequestParam("name") String name,
-            @RequestParam("description") String description,
-            @RequestParam("link") String link,
-            @RequestParam(value = "folder", defaultValue = "projects") String folder, 
-            @RequestParam("photo") MultipartFile file) throws IOException {
+    /**
+     * CREATE a new project.
+     * Automatically links the project to the single existing user profile.
+     */
+    @PostMapping("/add")
+    public ResponseEntity<?> addProject(@RequestBody Project project) {
+        // Find your single user profile (first one in DB)
+        User user = userRepository.findAll().stream().findFirst()
+                .orElseThrow(() -> new RuntimeException("Profile not found. Create user profile first!"));
+
+        // Set the relationship
+        project.setUser(user);
         
-        String fileName = saveFile(file, folder); // Uses the subfolder version
-        
-        Project project = new Project();
-        project.setName(name);
-        project.setDescription(description);
-        project.setLink(link);
-        project.setPhotoPath("uploads/" + folder + "/" + fileName); // Added "uploads/" prefix for easier URL building
-        
-        return repository.save(project);
+        Project savedProject = projectRepository.save(project);
+        return ResponseEntity.ok(savedProject);
     }
 
-    // Unified Helper Method
-    private String saveFile(MultipartFile file, String subFolder) throws IOException {
-        String uploadDir = "uploads/" + subFolder + "/"; 
-        Path uploadPath = Paths.get(uploadDir);
+    /**
+     * UPDATE an existing project by ID.
+     */
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody Project projectDetails) {
+        return projectRepository.findById(id).map(project -> {
+            project.setTitle(projectDetails.getTitle());
+            project.setDescription(projectDetails.getDescription());
+            project.setTechStack(projectDetails.getTechStack());
+            project.setGithubUrl(projectDetails.getGithubUrl());
+            project.setLiveDemoUrl(projectDetails.getLiveDemoUrl());
+            return ResponseEntity.ok(projectRepository.save(project));
+        }).orElse(ResponseEntity.notFound().build());
+    }
 
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
+    /**
+     * DELETE a project.
+     */
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteProject(@PathVariable Long id) {
+        if (projectRepository.existsById(id)) {
+            projectRepository.deleteById(id);
+            return ResponseEntity.ok("Project deleted successfully.");
         }
-
-        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-        Path filePath = uploadPath.resolve(fileName);
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return fileName;
-    }
-    
- // Add this to your ProjectController.java if missing
-    @GetMapping("/{id}")
-    public ResponseEntity<Project> getOne(@PathVariable Long id) {
-        return repository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-    // 3. UPDATE PROJECT (PUT)
-    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public Project updateProject(
-            @PathVariable Long id,
-            @RequestParam("name") String name,
-            @RequestParam("description") String description,
-            @RequestParam("link") String link,
-            @RequestParam(value = "folder", defaultValue = "projects") String folder,
-            @RequestParam(value = "photo", required = false) MultipartFile file) throws IOException {
-
-        return repository.findById(id).map(project -> {
-            project.setName(name);
-            project.setDescription(description);
-            project.setLink(link);
-
-            // Only update the photo if a new file is actually uploaded
-            if (file != null && !file.isEmpty()) {
-                try {
-                    String fileName = saveFile(file, folder);
-                    project.setPhotoPath(folder + "/" + fileName);
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to store new file", e);
-                }
-            }
-
-            return repository.save(project);
-        }).orElseThrow(() -> new RuntimeException("Project not found with id " + id));
-    }
-
-    // 4. DELETE PROJECT (DELETE)
-    @DeleteMapping("/{id}")
-    public String deleteProject(@PathVariable Long id) {
-        repository.deleteById(id);
-        return "Project deleted successfully!";
-    }
-
-    // --- HELPER METHOD TO SAVE FILE ---
-    private String saveFile(MultipartFile file) throws IOException {
-        String uploadDir = "uploads/projects/";
-        Path uploadPath = Paths.get(uploadDir);
-
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-        Path filePath = uploadPath.resolve(fileName);
-
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return fileName;
+        return ResponseEntity.notFound().build();
     }
 }
