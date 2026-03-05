@@ -231,7 +231,7 @@
     </div>
 </div>
     <script>
-        const API_BASE = "http://localhost:8080/api/v1";
+        const API_BASE = "https://portfoliodev-hy0w.onrender.com/api/v1";
         const HEADERS = { "X-API-KEY": "portfolio-dev", "Content-Type": "application/json" };
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('-translate-x-full'); }
@@ -254,7 +254,7 @@
             document.getElementById('prev-location').innerText = profile.location || "Earth";
             
             if(profile.profilePictureUrl) {
-                document.getElementById('prev-img').src = `http://localhost:8080${profile.profilePictureUrl}`;
+                document.getElementById('prev-img').src = `https://portfoliodev-hy0w.onrender.com${profile.profilePictureUrl}`;
             }
 
             document.getElementById('form-name').value = profile.name || "";
