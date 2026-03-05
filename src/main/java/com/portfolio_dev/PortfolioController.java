@@ -1,9 +1,5 @@
 package com.portfolio_dev;
 
-import com.yourpackage.model.User;
-import com.yourpackage.repository.UserRepository;
-import com.yourpackage.repository.ProjectRepository;
-import com.yourpackage.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;

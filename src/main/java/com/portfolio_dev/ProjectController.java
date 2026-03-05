@@ -1,10 +1,7 @@
 
 package com.portfolio_dev;
 
-import com.yourpackage.model.Project;
-import com.yourpackage.model.User;
-import com.yourpackage.repository.ProjectRepository;
-import com.yourpackage.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

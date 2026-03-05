@@ -1,9 +1,5 @@
 package com.portfolio_dev;
 
-import com.yourpackage.model.Skill;
-import com.yourpackage.model.User;
-import com.yourpackage.repository.SkillRepository;
-import com.yourpackage.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

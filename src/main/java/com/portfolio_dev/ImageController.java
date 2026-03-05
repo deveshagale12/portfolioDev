@@ -1,7 +1,5 @@
 package com.portfolio_dev;
 
-import com.yourpackage.model.PortfolioImage;
-import com.yourpackage.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

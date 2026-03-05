@@ -1,6 +1,6 @@
 package com.portfolio_dev;
 
-import com.yourpackage.model.ContactMessage; // Change to your actual package
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.lang.Nullable;

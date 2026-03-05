@@ -1,8 +1,6 @@
 
 package com.portfolio_dev;
 
-import com.yourpackage.repository.ProjectRepository; // Change to your actual package
-import com.yourpackage.service.FileStorageService;   // Change to your actual package
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;

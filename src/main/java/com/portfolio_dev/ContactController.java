@@ -1,7 +1,6 @@
 package com.portfolio_dev;
 
-import com.yourpackage.repository.ContactRepository;
-import com.yourpackage.service.EmailService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

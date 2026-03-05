@@ -1,6 +1,5 @@
 package com.portfolio_dev;
 
-import com.yourpackage.model.ContactMessage; // Change to your actual package
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
