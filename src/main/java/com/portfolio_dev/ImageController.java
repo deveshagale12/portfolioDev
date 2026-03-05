@@ -18,14 +18,17 @@ public class ImageController {
     private ImageRepository imageRepository;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
-        PortfolioImage img = new PortfolioImage();
-        img.setFileName(file.getOriginalFilename());
-        img.setData(file.getBytes());
-        img.setContentType(file.getContentType());
-        imageRepository.save(img);
-        return ResponseEntity.ok("Image uploaded successfully to NeonDB!");
-    }
+public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) throws IOException {
+    PortfolioImage img = new PortfolioImage();
+    img.setFileName(file.getOriginalFilename());
+    img.setData(file.getBytes());
+    img.setContentType(file.getContentType());
+    
+    PortfolioImage saved = imageRepository.save(img);
+    
+    // Return the ID so the frontend can save it to the User/Project record
+    return ResponseEntity.ok(Map.of("id", saved.getId()));
+}
 
     @GetMapping("/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
