@@ -1,3 +1,4 @@
+package com.portfolio_dev;
 
 import com.yourpackage.model.PortfolioImage;
 import com.yourpackage.repository.ImageRepository;

@@ -1,3 +1,4 @@
+package com.portfolio_dev;
 
 import com.yourpackage.model.Project; // Replace with your actual model package
 import org.springframework.data.jpa.repository.JpaRepository;

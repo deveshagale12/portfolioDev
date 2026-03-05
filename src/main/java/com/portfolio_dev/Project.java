@@ -1,3 +1,4 @@
+package com.portfolio_dev;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

@@ -1,3 +1,4 @@
+package com.portfolio_dev;
 
 import com.yourpackage.model.User; // Change to your actual package
 import org.springframework.data.jpa.repository.EntityGraph;

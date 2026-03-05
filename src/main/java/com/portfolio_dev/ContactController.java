@@ -1,3 +1,4 @@
+package com.portfolio_dev;
 
 import com.yourpackage.repository.ContactRepository;
 import com.yourpackage.service.EmailService;

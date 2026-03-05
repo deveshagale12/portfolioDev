@@ -1,3 +1,4 @@
+package com.portfolio_dev;
 
 import com.yourpackage.model.Skill;
 import com.yourpackage.model.User;

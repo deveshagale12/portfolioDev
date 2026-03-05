@@ -1,3 +1,4 @@
+package com.portfolio_dev;
 
 import jakarta.persistence.*;
 @Entity
